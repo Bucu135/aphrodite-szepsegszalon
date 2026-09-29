@@ -224,40 +224,457 @@
     <div class="sec-head rv">
       <span class="eyebrow">Akik dolgoznak veled</span>
       <h2>A csapat</h2>
-      <p class="lead">Kattints a portréra, és bemutatkozik — a saját szavaival.</p>
+      <p class="lead">Kattints a portréra, és legördül az árlistája. A bemutatkozást a neve alatt találod — a saját szavaival.</p>
     </div>
-    <div class="team">
+    <div class="team" data-arlapok>
       
-  <button class="medal rv rv-d0" type="button" data-bio="bio-katalin" aria-haspopup="dialog">
-    <span class="ring"><span class="win"><img src="img/K014-medal-63ae31-330.webp" srcset="img/K014-medal-63ae31-220.webp 220w, img/K014-medal-63ae31-330.webp 330w, img/K014-medal-63ae31-440.webp 440w" sizes="(max-width:420px) 70vw, (max-width:749px) 42vw, (max-width:1024px) 28vw, 200px" alt="Ciubotaru Katalin portréja" loading="lazy" decoding="async" style="--ar:1.0000"></span></span>
-    <h3>Ciubotaru Katalin</h3>
-    <span class="role">Női és férfi fodrász, fodrászoktató</span>
-    <span class="tovabb">Bemutatkozás</span>
-  </button>
-  <button class="medal rv rv-d1" type="button" data-bio="bio-klara" aria-haspopup="dialog">
-    <span class="ring"><span class="win"><img src="img/L015-medal-ed9eb1-330.webp" srcset="img/L015-medal-ed9eb1-220.webp 220w, img/L015-medal-ed9eb1-330.webp 330w, img/L015-medal-ed9eb1-440.webp 440w" sizes="(max-width:420px) 70vw, (max-width:749px) 42vw, (max-width:1024px) 28vw, 200px" alt="Gotthárd Klára portréja" loading="lazy" decoding="async" style="--ar:1.0000"></span></span>
-    <h3>Gotthárd Klára</h3>
-    <span class="role">Kozmetikus, sminkes, sminktetováló</span>
-    <span class="tovabb">Bemutatkozás</span>
-  </button>
-  <button class="medal rv rv-d2" type="button" data-bio="bio-barbi" aria-haspopup="dialog">
-    <span class="ring"><span class="win"><img src="img/B011-medal-54a391-330.webp" srcset="img/B011-medal-54a391-220.webp 220w, img/B011-medal-54a391-330.webp 330w, img/B011-medal-54a391-440.webp 440w" sizes="(max-width:420px) 70vw, (max-width:749px) 42vw, (max-width:1024px) 28vw, 200px" alt="Deák Barbara portréja" loading="lazy" decoding="async" style="--ar:1.0000"></span></span>
-    <h3>Deák Barbara</h3>
-    <span class="role">Szempilla- és szemöldök-stylist</span>
-    <span class="tovabb">Bemutatkozás</span>
-  </button>
-  <button class="medal rv rv-d3" type="button" data-bio="bio-gabi" aria-haspopup="dialog">
-    <span class="ring"><span class="win"><img src="img/G092-medal-29ae20-330.webp" srcset="img/G092-medal-29ae20-220.webp 220w, img/G092-medal-29ae20-330.webp 330w" sizes="(max-width:420px) 70vw, (max-width:749px) 42vw, (max-width:1024px) 28vw, 200px" alt="Kele Gabriella portréja" loading="lazy" decoding="async" style="--ar:1.0000"></span></span>
-    <h3>Kele Gabriella</h3>
-    <span class="role">Női és férfi fodrász</span>
-    <span class="tovabb">Bemutatkozás</span>
-  </button>
-  <button class="medal rv rv-d4" type="button" data-bio="bio-zsuzsa" aria-haspopup="dialog">
-    <span class="ring"><span class="win"><img src="img/Z008-medal-f22fbe-330.webp" srcset="img/Z008-medal-f22fbe-220.webp 220w, img/Z008-medal-f22fbe-330.webp 330w, img/Z008-medal-f22fbe-440.webp 440w" sizes="(max-width:420px) 70vw, (max-width:749px) 42vw, (max-width:1024px) 28vw, 200px" alt="Sebestyén Zsuzsa portréja" loading="lazy" decoding="async" style="--ar:1.0000"></span></span>
-    <h3>Sebestyén Zsuzsa</h3>
-    <span class="role">Női és férfi fodrász</span>
-    <span class="tovabb">Bemutatkozás</span>
-  </button>
+  <div class="medal rv rv-d0">
+    <button class="medal-fej" type="button" aria-expanded="false" aria-controls="arak-katalin" data-ar-nyit="arak-katalin">
+      <span class="ring"><span class="win"><img src="img/K014-medal-63ae31-330.webp" srcset="img/K014-medal-63ae31-220.webp 220w, img/K014-medal-63ae31-330.webp 330w, img/K014-medal-63ae31-440.webp 440w" sizes="(max-width:420px) 70vw, (max-width:749px) 42vw, (max-width:1024px) 28vw, 200px" alt="Ciubotaru Katalin portréja" loading="lazy" decoding="async" style="--ar:1.0000"></span></span>
+      <h3>Ciubotaru Katalin</h3>
+      <span class="role">Női és férfi fodrász, fodrászoktató</span>
+      <span class="tovabb">Árlista<i class="nyil" aria-hidden="true"></i></span>
+    </button>
+    <button class="medal-bio" type="button" data-bio="bio-katalin" aria-haspopup="dialog">Bemutatkozás</button>
+  </div>
+  <div class="medal rv rv-d1">
+    <button class="medal-fej" type="button" aria-expanded="false" aria-controls="arak-klara" data-ar-nyit="arak-klara">
+      <span class="ring"><span class="win"><img src="img/L015-medal-ed9eb1-330.webp" srcset="img/L015-medal-ed9eb1-220.webp 220w, img/L015-medal-ed9eb1-330.webp 330w, img/L015-medal-ed9eb1-440.webp 440w" sizes="(max-width:420px) 70vw, (max-width:749px) 42vw, (max-width:1024px) 28vw, 200px" alt="Gotthárd Klára portréja" loading="lazy" decoding="async" style="--ar:1.0000"></span></span>
+      <h3>Gotthárd Klára</h3>
+      <span class="role">Kozmetikus, sminkes, sminktetováló</span>
+      <span class="tovabb">Árlista<i class="nyil" aria-hidden="true"></i></span>
+    </button>
+    <button class="medal-bio" type="button" data-bio="bio-klara" aria-haspopup="dialog">Bemutatkozás</button>
+  </div>
+  <div class="medal rv rv-d2">
+    <button class="medal-fej" type="button" aria-expanded="false" aria-controls="arak-barbi" data-ar-nyit="arak-barbi">
+      <span class="ring"><span class="win"><img src="img/B011-medal-54a391-330.webp" srcset="img/B011-medal-54a391-220.webp 220w, img/B011-medal-54a391-330.webp 330w, img/B011-medal-54a391-440.webp 440w" sizes="(max-width:420px) 70vw, (max-width:749px) 42vw, (max-width:1024px) 28vw, 200px" alt="Deák Barbara portréja" loading="lazy" decoding="async" style="--ar:1.0000"></span></span>
+      <h3>Deák Barbara</h3>
+      <span class="role">Szempilla- és szemöldök-stylist</span>
+      <span class="tovabb">Árlista<i class="nyil" aria-hidden="true"></i></span>
+    </button>
+    <button class="medal-bio" type="button" data-bio="bio-barbi" aria-haspopup="dialog">Bemutatkozás</button>
+  </div>
+  <div class="medal rv rv-d3">
+    <button class="medal-fej" type="button" aria-expanded="false" aria-controls="arak-gabi" data-ar-nyit="arak-gabi">
+      <span class="ring"><span class="win"><img src="img/G092-medal-29ae20-330.webp" srcset="img/G092-medal-29ae20-220.webp 220w, img/G092-medal-29ae20-330.webp 330w" sizes="(max-width:420px) 70vw, (max-width:749px) 42vw, (max-width:1024px) 28vw, 200px" alt="Kele Gabriella portréja" loading="lazy" decoding="async" style="--ar:1.0000"></span></span>
+      <h3>Kele Gabriella</h3>
+      <span class="role">Női és férfi fodrász</span>
+      <span class="tovabb">Árlista<i class="nyil" aria-hidden="true"></i></span>
+    </button>
+    <button class="medal-bio" type="button" data-bio="bio-gabi" aria-haspopup="dialog">Bemutatkozás</button>
+  </div>
+  <div class="medal rv rv-d4">
+    <button class="medal-fej" type="button" aria-expanded="false" aria-controls="arak-zsuzsa" data-ar-nyit="arak-zsuzsa">
+      <span class="ring"><span class="win"><img src="img/Z008-medal-f22fbe-330.webp" srcset="img/Z008-medal-f22fbe-220.webp 220w, img/Z008-medal-f22fbe-330.webp 330w, img/Z008-medal-f22fbe-440.webp 440w" sizes="(max-width:420px) 70vw, (max-width:749px) 42vw, (max-width:1024px) 28vw, 200px" alt="Sebestyén Zsuzsa portréja" loading="lazy" decoding="async" style="--ar:1.0000"></span></span>
+      <h3>Sebestyén Zsuzsa</h3>
+      <span class="role">Női és férfi fodrász</span>
+      <span class="tovabb">Árlista<i class="nyil" aria-hidden="true"></i></span>
+    </button>
+    <button class="medal-bio" type="button" data-bio="bio-zsuzsa" aria-haspopup="dialog">Bemutatkozás</button>
+  </div>
+      
+  <div class="ar-panel" id="arak-katalin" role="region" aria-label="Ciubotaru Katalin árlistája" hidden>
+    <div class="ap-belso">
+      <div class="ap-fej">
+        <div><b>Ciubotaru Katalin</b><span>Női és férfi fodrász, fodrászoktató</span></div>
+        <button class="ap-zar" type="button" data-ar-zar aria-label="Árlista bezárása"></button>
+      </div>
+      <div class="ap-csopok">
+  <div class="ar-csop">
+    <h3>Mosás · vágás · szárítás</h3>
+    
+  <div class="ar-sor">
+    <div><span class="nev">Női hajvágás</span><span class="perc perc-szoveg">változó, frizurától függően</span></div>
+    <div class="ar num">125–195<small>RON</small></div>
+  </div>
+  <div class="ar-sor">
+    <div><span class="nev">Férfi</span><span class="perc num">40 perc</span></div>
+    <div class="ar num">45<small>RON</small></div>
+  </div>
+  <div class="ar-sor">
+    <div><span class="nev">Gyerek</span><span class="perc num">30 perc</span></div>
+    <div class="ar num">45<small>RON</small></div>
+  </div>
+    
+  </div>
+  <div class="ar-csop">
+    <h3>Szárítás, formázás</h3>
+    
+  <div class="ar-sor">
+    <div><span class="nev">Rövid haj</span><span class="perc num">30 perc</span></div>
+    <div class="ar num">55<small>RON</small></div>
+  </div>
+  <div class="ar-sor">
+    <div><span class="nev">Hosszú haj</span><span class="perc num">40 perc</span></div>
+    <div class="ar num">60<small>RON</small></div>
+  </div>
+  <div class="ar-sor">
+    <div><span class="nev">Kreppelés</span><span class="perc num">15–30 perc</span></div>
+    <div class="ar num">20<small>RON</small></div>
+  </div>
+  <div class="ar-sor">
+    <div><span class="nev">Hajvasalás</span><span class="perc num">15–30 perc</span></div>
+    <div class="ar num">20<small>RON</small></div>
+  </div>
+  <div class="ar-sor">
+    <div><span class="nev">Göndörítés</span><span class="perc num">15–30 perc</span></div>
+    <div class="ar num">20<small>RON</small></div>
+  </div>
+  <div class="ar-sor">
+    <div><span class="nev">Menyasszonyi konty</span><span class="perc num">120 perc</span></div>
+    <div class="ar num">210–350<small>RON</small></div>
+  </div>
+    
+  </div>
+  <div class="ar-csop">
+    <h3>Festés és melír</h3>
+    
+  <div class="ar-sor">
+    <div><span class="nev">Rövid haj (60 ml)</span><span class="perc num">130 perc</span></div>
+    <div class="ar num">90 + 45<small>RON</small></div>
+  </div>
+  <div class="ar-sor">
+    <div><span class="nev">Félhosszú haj (120 ml)</span><span class="perc num">130 perc</span></div>
+    <div class="ar num">180 + 45<small>RON</small></div>
+  </div>
+  <div class="ar-sor">
+    <div><span class="nev">Hosszú haj (140 ml)</span><span class="perc num">130 perc</span></div>
+    <div class="ar num">210 + 45<small>RON</small></div>
+  </div>
+  <div class="ar-sor">
+    <div><span class="nev">Melír (professzionális szőkítés)</span><span class="perc num">100 perc</span></div>
+    <div class="ar num">35–50<small>RON</small></div>
+  </div>
+  <div class="ar-sor">
+    <div><span class="nev">Balayage · Airtouch · Ombre</span><span class="perc num">240 perc</span></div>
+    <div class="ar num">250–400<small>RON</small></div>
+  </div>
+  <div class="ar-sor">
+    <div><span class="nev">Tartós hajsimítás keratinnal</span><span class="perc num">120 perc</span></div>
+    <div class="ar num">210<small>RON</small></div>
+  </div>
+  <div class="ar-sor">
+    <div><span class="nev">Póthaj felrakása</span></div>
+    <div class="ar num">300<small>RON</small></div>
+  </div>
+    <p class="megj">Londa festék. Az ár: a festék ára + 45 RON feltevés (a festék grammra: 1 g = 1,5 RON). A további szolgáltatások (pl. vágás, szárítás) ára ehhez adódik hozzá.</p>
+  </div></div>
+       <p class="ar-lab">Az árak lejben (RON) értendők, az időtartam tájékoztató jellegű.</p>
+      <div class="btn-row">
+        <a class="btn btn-solid btn-sm" href="kapcsolat.html?sz=katalin#foglalo">Időpontfoglalás</a>
+        <a class="btn btn-sm" href="tel:+40740633889">Hívás · 0740 633 889</a>
+      </div>
+    </div>
+  </div>
+  <div class="ar-panel" id="arak-klara" role="region" aria-label="Gotthárd Klára árlistája" hidden>
+    <div class="ap-belso">
+      <div class="ap-fej">
+        <div><b>Gotthárd Klára</b><span>Kozmetikus, sminkes, sminktetováló</span></div>
+        <button class="ap-zar" type="button" data-ar-zar aria-label="Árlista bezárása"></button>
+      </div>
+      <p class="ap-megj">Kláránál az ár a kezeléstől függ, személyesen egyezteti. Hívd a <a class="link" href="tel:+40745957598">0745 957 598</a> számon.</p>
+       <div class="ap-csopok"><div class="ar-csop"><h3>Smink</h3><ul class="ap-szolg"><li>Menyasszonyi smink</li><li>Alkalmi smink</li><li>Egyéni sminkoktatás</li><li>Egynapos sminkkurzus</li></ul></div><div class="ar-csop"><h3>Sminktetoválás</h3><ul class="ap-szolg"><li>Szemöldöktetoválás</li><li>Szemhéjtus</li><li>Ajaktetoválás</li><li>Lézeres tetoválás-eltávolítás és javítás</li></ul></div><div class="ar-csop"><h3>Arc- és bőrkezelés</h3><ul class="ap-szolg"><li>Aranyszál kezelés és feszesítés</li><li>Carbon Peeling</li><li>Arckezelés</li><li>Testkezelés</li></ul></div><div class="ar-csop"><h3>Szempilla és gyantázás</h3><ul class="ap-szolg"><li>Szempillafestés</li><li>Cukorgyanta</li><li>Férfi gyantázás (hát, mellkas)</li></ul></div></div>
+      <div class="btn-row">
+        <a class="btn btn-solid btn-sm" href="kapcsolat.html?sz=klara#foglalo">Időpontfoglalás</a>
+        <a class="btn btn-sm" href="tel:+40745957598">Hívás · 0745 957 598</a>
+      </div>
+    </div>
+  </div>
+  <div class="ar-panel" id="arak-barbi" role="region" aria-label="Deák Barbara árlistája" hidden>
+    <div class="ap-belso">
+      <div class="ap-fej">
+        <div><b>Deák Barbara</b><span>Szempilla- és szemöldök-stylist</span></div>
+        <button class="ap-zar" type="button" data-ar-zar aria-label="Árlista bezárása"></button>
+      </div>
+      <div class="ap-csopok">
+  <div class="ar-csop">
+    <h3>Szempillaépítés</h3>
+    <table class="ar-tabla num"><thead><tr><th scope="col">Volumen</th><th scope="col">Építés · RON</th><th scope="col">Töltés · RON</th></tr></thead>
+         <tbody><tr><td>1D</td><td>180</td><td>130</td></tr><tr><td>2D</td><td>190</td><td>140</td></tr><tr><td>3D</td><td>200</td><td>150</td></tr><tr><td>4D</td><td>210</td><td>160</td></tr><tr><td>6D</td><td>220</td><td>170</td></tr></tbody></table>
+    <p class="megj">Építés 120 perc, töltés 90 perc. Hossz 6–13 mm, ív: C, CC, D, M, L. Töltés legfeljebb 4 hétig lehetséges, utána új szett szükséges.</p>
+  </div>
+  <div class="ar-csop">
+    <h3>Lifting és leoldás</h3>
+    
+  <div class="ar-sor">
+    <div><span class="nev">Szempilla-lifting</span><span class="perc num">60 perc</span></div>
+    <div class="ar num">110<small>RON</small></div>
+  </div>
+  <div class="ar-sor">
+    <div><span class="nev">Szemöldök-laminálás</span><span class="perc num">60 perc</span></div>
+    <div class="ar num">110<small>RON</small></div>
+  </div>
+  <div class="ar-sor">
+    <div><span class="nev">Szempilla leoldása</span><span class="perc num">20 perc</span></div>
+    <div class="ar num">40<small>RON</small></div>
+  </div>
+    
+  </div>
+  <div class="ar-csop">
+    <h3>Szemöldök</h3>
+    
+  <div class="ar-sor">
+    <div><span class="nev">Szemöldökszedés</span><span class="perc num">15 perc</span></div>
+    <div class="ar num">25<small>RON</small></div>
+  </div>
+  <div class="ar-sor">
+    <div><span class="nev">Szemöldökfestés</span><span class="perc num">15 perc</span></div>
+    <div class="ar num">25<small>RON</small></div>
+  </div>
+  <div class="ar-sor">
+    <div><span class="nev">Szedés és festés</span><span class="perc num">30 perc</span></div>
+    <div class="ar num">50<small>RON</small></div>
+  </div>
+  <div class="ar-sor">
+    <div><span class="nev">Szempillafestés</span><span class="perc num">15 perc</span></div>
+    <div class="ar num">25<small>RON</small></div>
+  </div>
+    
+  </div>
+  <div class="ar-csop">
+    <h3>Gyantázás</h3>
+    
+  <div class="ar-sor">
+    <div><span class="nev">Bajusz</span><span class="perc num">5 perc</span></div>
+    <div class="ar num">20<small>RON</small></div>
+  </div>
+  <div class="ar-sor">
+    <div><span class="nev">Hónalj</span><span class="perc num">10 perc</span></div>
+    <div class="ar num">30<small>RON</small></div>
+  </div>
+  <div class="ar-sor">
+    <div><span class="nev">Bikinivonal</span><span class="perc num">20 perc</span></div>
+    <div class="ar num">35<small>RON</small></div>
+  </div>
+  <div class="ar-sor">
+    <div><span class="nev">Alkar</span><span class="perc num">20 perc</span></div>
+    <div class="ar num">35<small>RON</small></div>
+  </div>
+  <div class="ar-sor">
+    <div><span class="nev">Teljes kar</span><span class="perc num">25 perc</span></div>
+    <div class="ar num">45<small>RON</small></div>
+  </div>
+  <div class="ar-sor">
+    <div><span class="nev">Lábszár</span><span class="perc num">20 perc</span></div>
+    <div class="ar num">40<small>RON</small></div>
+  </div>
+  <div class="ar-sor">
+    <div><span class="nev">Teljes láb</span><span class="perc num">30 perc</span></div>
+    <div class="ar num">60<small>RON</small></div>
+  </div>
+  <div class="ar-sor">
+    <div><span class="nev">Férfi hát</span><span class="perc num">30 perc</span></div>
+    <div class="ar num">60<small>RON</small></div>
+  </div>
+  <div class="ar-sor">
+    <div><span class="nev">Férfi mellkas</span><span class="perc num">30 perc</span></div>
+    <div class="ar num">60<small>RON</small></div>
+  </div>
+    
+  </div>
+  <div class="ar-csop">
+    <h3>Masszázs</h3>
+    
+  <div class="ar-sor">
+    <div><span class="nev">Arc és dekoltázs</span><span class="perc num">30 perc</span></div>
+    <div class="ar num">50<small>RON</small></div>
+  </div>
+    
+  </div></div>
+       <p class="ar-lab">Az árak lejben (RON) értendők, az időtartam tájékoztató jellegű.</p>
+      <div class="btn-row">
+        <a class="btn btn-solid btn-sm" href="kapcsolat.html?sz=barbi#foglalo">Időpontfoglalás</a>
+        <a class="btn btn-sm" href="tel:+40743852185">Hívás · 0743 852 185</a>
+      </div>
+    </div>
+  </div>
+  <div class="ar-panel" id="arak-gabi" role="region" aria-label="Kele Gabriella árlistája" hidden>
+    <div class="ap-belso">
+      <div class="ap-fej">
+        <div><b>Kele Gabriella</b><span>Gabi és Zsuzsa közös árlistája</span></div>
+        <button class="ap-zar" type="button" data-ar-zar aria-label="Árlista bezárása"></button>
+      </div>
+      <div class="ap-csopok">
+  <div class="ar-csop">
+    <h3>Mosás · vágás · szárítás</h3>
+    
+  <div class="ar-sor">
+    <div><span class="nev">Rövid haj</span><span class="perc num">60 perc</span></div>
+    <div class="ar num">80<small>RON</small></div>
+  </div>
+  <div class="ar-sor">
+    <div><span class="nev">Hosszú haj</span><span class="perc num">90 perc</span></div>
+    <div class="ar num">90<small>RON</small></div>
+  </div>
+  <div class="ar-sor">
+    <div><span class="nev">Nagyon hosszú haj</span><span class="perc num">150 perc</span></div>
+    <div class="ar num">130<small>RON</small></div>
+  </div>
+  <div class="ar-sor">
+    <div><span class="nev">Férfi</span><span class="perc num">40 perc</span></div>
+    <div class="ar num">40<small>RON</small></div>
+  </div>
+  <div class="ar-sor">
+    <div><span class="nev">Gyerek</span><span class="perc num">30 perc</span></div>
+    <div class="ar num">40<small>RON</small></div>
+  </div>
+    
+  </div>
+  <div class="ar-csop">
+    <h3>Szárítás, formázás</h3>
+    
+  <div class="ar-sor">
+    <div><span class="nev">Rövid haj</span><span class="perc num">30 perc</span></div>
+    <div class="ar num">40<small>RON</small></div>
+  </div>
+  <div class="ar-sor">
+    <div><span class="nev">Hosszú haj</span><span class="perc num">40 perc</span></div>
+    <div class="ar num">55<small>RON</small></div>
+  </div>
+  <div class="ar-sor">
+    <div><span class="nev">Kreppelés</span><span class="perc num">15–30 perc</span></div>
+    <div class="ar num">20<small>RON</small></div>
+  </div>
+  <div class="ar-sor">
+    <div><span class="nev">Göndörítés</span><span class="perc num">15–30 perc</span></div>
+    <div class="ar num">20<small>RON</small></div>
+  </div>
+  <div class="ar-sor">
+    <div><span class="nev">Hajvasalás</span><span class="perc num">15–30 perc</span></div>
+    <div class="ar num">20<small>RON</small></div>
+  </div>
+  <div class="ar-sor">
+    <div><span class="nev">Menyasszonyi frizura</span><span class="perc num">120 perc</span></div>
+    <div class="ar num">150–250<small>RON</small></div>
+  </div>
+    
+  </div>
+  <div class="ar-csop">
+    <h3>Festés és melír</h3>
+    
+  <div class="ar-sor">
+    <div><span class="nev">Melír</span><span class="perc num">100 perc</span></div>
+    <div class="ar num">50<small>RON</small></div>
+  </div>
+  <div class="ar-sor">
+    <div><span class="nev">Tőfestés</span><span class="perc num">30 perc</span></div>
+    <div class="ar num">28<small>RON</small></div>
+  </div>
+  <div class="ar-sor">
+    <div><span class="nev">Balayage</span><span class="perc num">240 perc</span></div>
+    <div class="ar num">200–300<small>RON</small></div>
+  </div>
+  <div class="ar-sor">
+    <div><span class="nev">Airtouch · Ombre</span><span class="perc num">240 perc</span></div>
+    <div class="ar num">200–300<small>RON</small></div>
+  </div>
+  <div class="ar-sor">
+    <div><span class="nev">Tartós hajsimítás</span><span class="perc num">120 perc</span></div>
+    <div class="ar num">150–450<small>RON</small></div>
+  </div>
+    <p class="megj">Londa festék és szőkítőpor grammra: 1 g = 1,5 RON. Tartós hajsimítás: 1 g = 1 RON.</p>
+  </div></div>
+       <p class="ar-lab">Az árak lejben (RON) értendők, az időtartam tájékoztató jellegű.</p>
+      <div class="btn-row">
+        <a class="btn btn-solid btn-sm" href="kapcsolat.html?sz=gabi#foglalo">Időpontfoglalás</a>
+        <a class="btn btn-sm" href="tel:+40756582329">Hívás · 0756 582 329</a>
+      </div>
+    </div>
+  </div>
+  <div class="ar-panel" id="arak-zsuzsa" role="region" aria-label="Sebestyén Zsuzsa árlistája" hidden>
+    <div class="ap-belso">
+      <div class="ap-fej">
+        <div><b>Sebestyén Zsuzsa</b><span>Gabi és Zsuzsa közös árlistája</span></div>
+        <button class="ap-zar" type="button" data-ar-zar aria-label="Árlista bezárása"></button>
+      </div>
+      <div class="ap-csopok">
+  <div class="ar-csop">
+    <h3>Mosás · vágás · szárítás</h3>
+    
+  <div class="ar-sor">
+    <div><span class="nev">Rövid haj</span><span class="perc num">60 perc</span></div>
+    <div class="ar num">80<small>RON</small></div>
+  </div>
+  <div class="ar-sor">
+    <div><span class="nev">Hosszú haj</span><span class="perc num">90 perc</span></div>
+    <div class="ar num">90<small>RON</small></div>
+  </div>
+  <div class="ar-sor">
+    <div><span class="nev">Nagyon hosszú haj</span><span class="perc num">150 perc</span></div>
+    <div class="ar num">130<small>RON</small></div>
+  </div>
+  <div class="ar-sor">
+    <div><span class="nev">Férfi</span><span class="perc num">40 perc</span></div>
+    <div class="ar num">40<small>RON</small></div>
+  </div>
+  <div class="ar-sor">
+    <div><span class="nev">Gyerek</span><span class="perc num">30 perc</span></div>
+    <div class="ar num">40<small>RON</small></div>
+  </div>
+    
+  </div>
+  <div class="ar-csop">
+    <h3>Szárítás, formázás</h3>
+    
+  <div class="ar-sor">
+    <div><span class="nev">Rövid haj</span><span class="perc num">30 perc</span></div>
+    <div class="ar num">40<small>RON</small></div>
+  </div>
+  <div class="ar-sor">
+    <div><span class="nev">Hosszú haj</span><span class="perc num">40 perc</span></div>
+    <div class="ar num">55<small>RON</small></div>
+  </div>
+  <div class="ar-sor">
+    <div><span class="nev">Kreppelés</span><span class="perc num">15–30 perc</span></div>
+    <div class="ar num">20<small>RON</small></div>
+  </div>
+  <div class="ar-sor">
+    <div><span class="nev">Göndörítés</span><span class="perc num">15–30 perc</span></div>
+    <div class="ar num">20<small>RON</small></div>
+  </div>
+  <div class="ar-sor">
+    <div><span class="nev">Hajvasalás</span><span class="perc num">15–30 perc</span></div>
+    <div class="ar num">20<small>RON</small></div>
+  </div>
+  <div class="ar-sor">
+    <div><span class="nev">Menyasszonyi frizura</span><span class="perc num">120 perc</span></div>
+    <div class="ar num">150–250<small>RON</small></div>
+  </div>
+    
+  </div>
+  <div class="ar-csop">
+    <h3>Festés és melír</h3>
+    
+  <div class="ar-sor">
+    <div><span class="nev">Melír</span><span class="perc num">100 perc</span></div>
+    <div class="ar num">50<small>RON</small></div>
+  </div>
+  <div class="ar-sor">
+    <div><span class="nev">Tőfestés</span><span class="perc num">30 perc</span></div>
+    <div class="ar num">28<small>RON</small></div>
+  </div>
+  <div class="ar-sor">
+    <div><span class="nev">Balayage</span><span class="perc num">240 perc</span></div>
+    <div class="ar num">200–300<small>RON</small></div>
+  </div>
+  <div class="ar-sor">
+    <div><span class="nev">Airtouch · Ombre</span><span class="perc num">240 perc</span></div>
+    <div class="ar num">200–300<small>RON</small></div>
+  </div>
+  <div class="ar-sor">
+    <div><span class="nev">Tartós hajsimítás</span><span class="perc num">120 perc</span></div>
+    <div class="ar num">150–450<small>RON</small></div>
+  </div>
+    <p class="megj">Londa festék és szőkítőpor grammra: 1 g = 1,5 RON. Tartós hajsimítás: 1 g = 1 RON.</p>
+  </div></div>
+       <p class="ar-lab">Az árak lejben (RON) értendők, az időtartam tájékoztató jellegű.</p>
+      <div class="btn-row">
+        <a class="btn btn-solid btn-sm" href="kapcsolat.html?sz=zsuzsa#foglalo">Időpontfoglalás</a>
+        <a class="btn btn-sm" href="tel:+40754207223">Hívás · 0754 207 223</a>
+      </div>
+    </div>
+  </div>
     </div>
   </div>
   

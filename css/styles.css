@@ -299,7 +299,8 @@ html:not(.js) .loader{display:none}
    CSAPAT — medalionok + bemutatkozó ablak
    ============================================================ */
 .team{display:grid; grid-template-columns:repeat(5,1fr); gap:clamp(18px,2.6vw,40px)}
-.medal{text-align:center; background:none; border:0; padding:0; cursor:pointer; display:flex; flex-direction:column; align-items:center}
+.medal{text-align:center; display:flex; flex-direction:column; align-items:center}
+.medal-fej{text-align:center; background:none; border:0; padding:0; cursor:pointer; display:flex; flex-direction:column; align-items:center; color:inherit; font:inherit; width:100%}
 .ring{
   width:min(200px,100%); aspect-ratio:1; margin:0 auto 22px; border-radius:50%; padding:6px;
   background:linear-gradient(140deg,var(--gold-lt),var(--gold) 38%,var(--gold-dp) 62%,var(--gold-lt));
@@ -308,12 +309,36 @@ html:not(.js) .loader{display:none}
 }
 .ring .win{display:block; width:100%; height:100%; border-radius:50%; overflow:hidden; border:2px solid var(--ivory); background:var(--ivory-3)}
 .ring img{width:100%; height:100%; object-fit:cover; transition:transform 1.1s var(--ease)}
-.medal:hover .ring{transform:translateY(-4px); box-shadow:0 18px 40px rgba(20,17,14,.2)}
-.medal:hover .ring img{transform:scale(1.05)}
+.medal-fej:hover .ring,.medal-fej[aria-expanded="true"] .ring{transform:translateY(-4px); box-shadow:0 18px 40px rgba(20,17,14,.2)}
+.medal-fej:hover .ring img{transform:scale(1.05)}
 .medal h3{font-size:clamp(17px,1.45vw,19px); letter-spacing:.03em; margin-bottom:8px}
 .medal .role{font-size:12.5px; line-height:1.55; letter-spacing:.08em; color:var(--gold-dp); max-width:24ch}
 .medal .tovabb{margin-top:14px; font-size:11.5px; font-weight:600; letter-spacing:.2em; text-transform:uppercase; color:var(--muted); border-bottom:1px solid var(--line); padding-bottom:3px; transition:color .3s}
-.medal:hover .tovabb{color:var(--ink)}
+.medal-fej:hover .tovabb,.medal-fej[aria-expanded="true"] .tovabb{color:var(--ink); border-color:var(--gold)}
+.medal .tovabb{display:inline-flex; align-items:center; gap:8px}
+.medal .nyil{width:7px; height:7px; border-right:1.5px solid currentColor; border-bottom:1.5px solid currentColor; transform:translateY(-2px) rotate(45deg); transition:transform .35s var(--ease)}
+.medal-fej[aria-expanded="true"] .nyil{transform:translateY(2px) rotate(-135deg)}
+.medal-bio{margin-top:10px; background:none; border:0; padding:4px 2px; cursor:pointer; font:inherit; font-size:12.5px; letter-spacing:.04em; color:var(--gold-dp); text-decoration:underline; text-underline-offset:3px}
+.medal-bio:hover{color:var(--ink)}
+
+/* legördülő árlista a csapat alatt — a JS a kattintott portré sora után teszi */
+.ar-panel{grid-column:1 / -1; background:var(--ivory-2); border:1px solid var(--line); position:relative; animation:apLe .5s var(--ease)}
+.ar-panel[hidden]{display:none}
+@keyframes apLe{from{opacity:0; transform:translateY(-10px)} to{opacity:1; transform:none}}
+.ap-belso{padding:clamp(22px,3.4vw,44px)}
+.ap-fej{display:flex; justify-content:space-between; align-items:flex-start; gap:16px; border-bottom:1px solid var(--line); padding-bottom:16px}
+.ap-fej b{display:block; font-family:var(--f-disp); font-weight:400; font-size:clamp(20px,2vw,26px)}
+.ap-fej span{display:block; margin-top:4px; font-size:12.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--gold-dp)}
+.ap-zar{flex:0 0 auto; width:40px; height:40px; border:1px solid var(--line); background:var(--ivory); cursor:pointer; position:relative}
+.ap-zar::before,.ap-zar::after{content:''; position:absolute; left:11px; right:11px; top:50%; height:1.5px; background:var(--ink); transform:rotate(45deg)}
+.ap-zar::after{transform:rotate(-45deg)}
+.ap-csopok{columns:2 320px; column-gap:clamp(28px,4vw,60px)}
+.ap-csopok .ar-csop{break-inside:avoid; display:inline-block; width:100%}
+.ap-megj{margin:20px 0 10px; font-size:16px}
+.ap-szolg{margin:4px 0 0; padding-left:1.1em}
+.ap-szolg li{padding:5px 0; break-inside:avoid}
+.ap-szolg li::marker{color:var(--gold-dp)}
+.ar-panel .btn-row{margin-top:22px}
 
 .bio{border:0; padding:0; max-width:min(980px,calc(100vw - 32px)); width:100%; max-height:calc(100dvh - 32px); background:var(--ivory); color:var(--ink); overflow:auto}
 .bio::backdrop{background:rgba(20,17,14,.72); backdrop-filter:blur(4px)}
@@ -593,7 +618,7 @@ html:not(.js) .loader{display:none}
   .stat:nth-child(3){border-left:0}
   .vitrin{grid-template-columns:1fr}
   .team{grid-template-columns:1fr 1fr}
-  .team .medal:last-child{grid-column:1 / -1}
+  .team .medal:nth-of-type(5){grid-column:1 / -1}
   .gal{grid-template-columns:1fr 1fr}
   .split,.split-rev{grid-template-columns:1fr; min-height:0}
   .split .pane-img{height:92vw; max-height:520px; order:0}

@@ -115,6 +115,45 @@
     d.addEventListener('close', function () { if (d._gomb) d._gomb.focus({ preventScroll: true }); });
   });
 
+  /* ── kezdőlapi csapat: legördülő árlisták ──
+     Egyszerre egy nyitott. A panel a kattintott portré SORÁNAK utolsó eleme után kerül a rácsba
+     (teljes szélességben), így 5/3/2/1 oszlopnál is közvetlenül a portré alatt nyílik. */
+  var racs = $('[data-arlapok]');
+  if (racs) {
+    var nyitott = null;
+    var helyez = function (panel, gomb) {
+      var medal = gomb.closest('.medal'), utolso = medal;
+      $$('.medal', racs).forEach(function (m) { if (Math.abs(m.offsetTop - medal.offsetTop) < 8) utolso = m; });
+      utolso.after(panel);
+    };
+    var zar = function () {
+      if (!nyitott) return;
+      nyitott.panel.hidden = true;
+      nyitott.gomb.setAttribute('aria-expanded', 'false');
+      nyitott = null;
+    };
+    $$('[data-ar-nyit]', racs).forEach(function (g) {
+      g.addEventListener('click', function () {
+        var p = document.getElementById(g.getAttribute('data-ar-nyit'));
+        var ugyanaz = nyitott && nyitott.gomb === g;
+        zar();
+        if (ugyanaz) return;
+        helyez(p, g);
+        p.hidden = false;
+        g.setAttribute('aria-expanded', 'true');
+        nyitott = { panel: p, gomb: g };
+        // ha a panel teteje a képernyő alsó harmadába esne, felgörgetjük, hogy látsszon
+        var r = p.getBoundingClientRect();
+        if (r.top > window.innerHeight * 0.66) window.scrollBy({ top: r.top - window.innerHeight * 0.25, behavior: reduce ? 'auto' : 'smooth' });
+      });
+    });
+    $$('[data-ar-zar]', racs).forEach(function (z) {
+      z.addEventListener('click', function () { var g = nyitott && nyitott.gomb; zar(); if (g) g.focus({ preventScroll: true }); });
+    });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && nyitott && !$('dialog[open]')) { var g = nyitott.gomb; zar(); g.focus(); } });
+    window.addEventListener('resize', function () { if (nyitott) helyez(nyitott.panel, nyitott.gomb); });
+  }
+
   /* ── árlista-fülek (Katalin / Gabi és Zsuzsa) — nyilakkal is ── */
   $$('[data-fulek]').forEach(function (blokk) {
     var fulek = $$('[role="tab"]', blokk);
