@@ -441,9 +441,11 @@ html:not(.js) .loader{display:none}
 .ar-csop{margin-top:26px}
 .ar-csop h3{font-size:15px; font-family:var(--f-body); font-weight:600; letter-spacing:.2em; color:var(--gold-dp); margin-bottom:6px}
 /* az ár egyedül áll a jobb szélen; az időtartam a név mellé kerül (két szám ne kerüljön egymás fölé) */
-.ar-sor{display:grid; grid-template-columns:1fr auto; gap:16px; align-items:baseline; padding:11px 0; border-bottom:1px dotted var(--line)}
+.ar-sor{display:grid; grid-template-columns:minmax(0,1fr) auto; gap:16px; align-items:baseline; padding:11px 0; border-bottom:1px dotted var(--line)}
 .ar-sor .nev{font-size:16px}
 .ar-sor .perc{font-size:13px; color:var(--muted); margin-left:8px; white-space:nowrap}
+.ar-sor .perc-szoveg{white-space:normal}   /* szöveges idő (pl. „változó, frizurától függően") törhet */
+.ar-sor > div:first-child{min-width:0}
 .ar-sor .ar{font-family:var(--f-disp); font-size:19px; white-space:nowrap; text-align:right}
 .ar-sor .ar small{font-family:var(--f-body); font-size:12.5px; color:var(--muted); margin-left:4px; letter-spacing:.06em}
 .ar-tabla{width:100%; border-collapse:collapse; font-size:16px}
