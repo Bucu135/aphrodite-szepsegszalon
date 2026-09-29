@@ -17,12 +17,12 @@
   --ivory-3: #E7DECF;   /* kártya-alap, kép-helyőrző */
   --ink:     #14110E;   /* szöveg, sötét panel */
   --espresso:#2A231C;   /* másodlagos sötét */
-  --gold:    #CDA23A;   /* accent — CSAK vonal, keret, kitöltés-hover */
-  --gold-lt: #E8C766;   /* sötét alapon szöveg, vonal */
-  --gold-dp: #836414;   /* világos alapon apró szöveg (kontraszt ~4,9:1) */
+  --gold:    #B08455;   /* accent — CSAK vonal, keret, kitöltés-hover */
+  --gold-lt: #D8B488;   /* sötét alapon szöveg, vonal */
+  --gold-dp: #7A5530;   /* világos alapon apró szöveg (kontraszt ~5,9:1) */
   --muted:   #4A4036;   /* halk szöveg — sötétebb, hogy a vékony betű is olvasható legyen */
-  --line:      rgba(205,162,58,.42);
-  --line-soft: rgba(205,162,58,.22);
+  --line:      rgba(176,132,85,.42);
+  --line-soft: rgba(176,132,85,.22);
   --dark-muted:#D2C8B9; /* halk szöveg sötét alapon */
 
   /* — betűk — */
@@ -145,7 +145,7 @@ html:not(.js) .loader{display:none}
   position:sticky; top:0; z-index:800;
   background:rgba(42,35,28,.9);
   backdrop-filter:blur(14px) saturate(1.15); -webkit-backdrop-filter:blur(14px) saturate(1.15);
-  border-bottom:1px solid rgba(205,162,58,.30);
+  border-bottom:1px solid rgba(176,132,85,.30);
 }
 .site-head .inner{
   max-width:var(--maxw); margin:0 auto; padding:0 var(--gut); height:var(--head-h);
@@ -172,14 +172,14 @@ html:not(.js) .loader{display:none}
 /* nyelvváltó (HU · RO): halk, a fejléc sötét alapján; az aktív nyelv arany */
 .nyelv{display:flex; align-items:center; gap:2px; font-size:12.5px; font-weight:600; letter-spacing:.14em}
 .nyelv a{padding:6px 7px; color:var(--dark-muted); text-decoration:none; transition:color .3s}
-.nyelv a + a{border-left:1px solid rgba(232,199,102,.35)}
+.nyelv a + a{border-left:1px solid rgba(216,180,136,.35)}
 .nyelv a:hover{color:var(--ivory)}
 .nyelv a[aria-current]{color:var(--gold-lt)}
 .btn-head{color:var(--ivory); padding:12px 20px; font-size:11.5px; letter-spacing:.18em}
 .btn-head:hover{color:var(--ink)}
 
 .menu-btn{
-  display:none; width:44px; height:44px; border:1px solid rgba(205,162,58,.45); background:transparent;
+  display:none; width:44px; height:44px; border:1px solid rgba(176,132,85,.45); background:transparent;
   cursor:pointer; position:relative; flex:0 0 auto;
 }
 .menu-btn span{position:absolute; left:11px; right:11px; height:1px; background:var(--ivory); transition:transform .4s var(--ease), top .4s var(--ease)}
@@ -197,7 +197,7 @@ html:not(.js) .loader{display:none}
 .mobil-menu[hidden]{display:flex}
 .menu-nyitva .mobil-menu{opacity:1; visibility:visible; transition:opacity .45s var(--ease)}
 .mobil-menu ul{list-style:none; margin:0; padding:0}
-.mobil-menu li{border-bottom:1px solid rgba(205,162,58,.22); opacity:0; transform:translateY(12px); transition:opacity .5s var(--ease), transform .5s var(--ease)}
+.mobil-menu li{border-bottom:1px solid rgba(176,132,85,.22); opacity:0; transform:translateY(12px); transition:opacity .5s var(--ease), transform .5s var(--ease)}
 .menu-nyitva .mobil-menu li{opacity:1; transform:none; transition-delay:calc(.06s * var(--i) + .08s)}
 .mobil-menu nav a{display:block; padding:16px 2px; font-family:var(--f-disp); font-size:clamp(24px,7vw,34px); letter-spacing:.08em; text-transform:uppercase; text-decoration:none; line-height:1.2}
 .mobil-menu-foot{display:flex; flex-direction:column; gap:16px; align-items:flex-start}
@@ -281,7 +281,7 @@ html:not(.js) .loader{display:none}
   padding:clamp(26px,3vw,40px) clamp(22px,2.4vw,32px);
   position:relative; transition:background .5s var(--ease);
 }
-.cell:hover{background:rgba(205,162,58,.08)}
+.cell:hover{background:rgba(176,132,85,.08)}
 .cell .idx{font-family:var(--f-disp); font-size:13px; letter-spacing:.24em; color:var(--gold-dp); margin-bottom:18px; transition:transform .5s var(--ease)}
 .cell:hover .idx{transform:translateX(5px)}
 .cell h3{margin-bottom:12px}
@@ -343,6 +343,9 @@ html:not(.js) .loader{display:none}
 .gal-item figcaption .n{font-size:12.5px; font-weight:600; color:var(--gold-dp); letter-spacing:.08em; flex:0 0 auto}
 .gal-item figcaption .ki{display:block; margin-top:2px; font-size:12.5px; letter-spacing:.04em; color:var(--gold-dp)}
 .gal-item[hidden]{display:none}
+/* hosszú összetett szó (pl. „Szemöldöktetoválás") 320 px-en ne tágítsa ki a rácsot */
+.gal > *{min-width:0}
+.gal-item figcaption span:not(.n){overflow-wrap:anywhere; hyphens:auto}
 .gal-more{text-align:center; margin-top:clamp(34px,4vw,54px)}
 .gal-kat{grid-column:1 / -1; display:flex; align-items:center; gap:18px; margin-top:24px}
 .gal-kat:first-child{margin-top:0}
@@ -364,12 +367,12 @@ html:not(.js) .loader{display:none}
 .lb-stage img{max-width:100%; max-height:calc(100dvh - 150px); width:auto; height:auto; object-fit:contain}
 .lb-bar{display:flex; justify-content:space-between; align-items:center; gap:16px; padding:14px var(--gut) 20px; font-size:14px; color:#D6CCBD}
 .lb-bar .n{font-weight:600; color:var(--gold-lt); letter-spacing:.1em; margin-right:10px}
-.lb-btn{width:48px; height:48px; border:1px solid rgba(232,199,102,.4); background:rgba(20,17,14,.5); cursor:pointer; position:absolute; top:50%; transform:translateY(-50%)}
+.lb-btn{width:48px; height:48px; border:1px solid rgba(216,180,136,.4); background:rgba(20,17,14,.5); cursor:pointer; position:absolute; top:50%; transform:translateY(-50%)}
 .lb-btn::before{content:''; position:absolute; left:18px; top:18px; width:11px; height:11px; border-top:1px solid var(--gold-lt); border-left:1px solid var(--gold-lt); transform:rotate(-45deg)}
 .lb-prev{left:clamp(8px,2vw,28px)}
 .lb-next{right:clamp(8px,2vw,28px)}
 .lb-next::before{left:15px; transform:rotate(135deg)}
-.lb-close{position:absolute; top:12px; right:12px; width:48px; height:48px; border:1px solid rgba(232,199,102,.4); background:transparent; cursor:pointer}
+.lb-close{position:absolute; top:12px; right:12px; width:48px; height:48px; border:1px solid rgba(216,180,136,.4); background:transparent; cursor:pointer}
 .lb-close::before,.lb-close::after{content:''; position:absolute; left:13px; right:13px; top:23px; height:1px; background:var(--ivory); transform:rotate(45deg)}
 .lb-close::after{transform:rotate(-45deg)}
 
@@ -386,6 +389,16 @@ html:not(.js) .loader{display:none}
 .split .pane-txt p{color:var(--dark-muted)}
 .split .btn-row{margin-top:18px}
 .split-rev .pane-img{order:2}
+
+/* Klára sminkkurzusa: plakát (vágatlan) + szöveg egymás mellett, mobilon egymás alatt */
+.klara-kurzus{display:grid; grid-template-columns:minmax(0,400px) minmax(0,1fr); gap:clamp(36px,6vw,80px); align-items:center; max-width:1080px}
+.klara-kurzus .plakat{margin:0; box-shadow:0 18px 48px rgba(0,0,0,.35)}
+.klara-kurzus .plakat img{display:block; width:100%; height:auto}
+@media (max-width:749px){
+  .klara-kurzus{grid-template-columns:1fr; text-align:center}
+  .klara-kurzus .plakat{max-width:400px; margin:0 auto}
+  .klara-kurzus .btn-row{justify-content:center}
+}
 
 /* ============================================================
    SZOLGÁLTATÁS-TERÜLETEK (aloldal)
@@ -409,9 +422,9 @@ html:not(.js) .loader{display:none}
 .kik{display:flex; flex-wrap:wrap; gap:10px 12px; margin-top:26px; align-items:center}
 .kik .eyebrow{margin-right:6px}
 .kik a{display:inline-flex; align-items:center; gap:10px; text-decoration:none; font-size:14.5px; padding:5px 14px 5px 5px; border:1px solid var(--line); border-radius:40px; transition:border-color .3s, background .3s}
-.kik a:hover{border-color:var(--gold); background:rgba(205,162,58,.08)}
+.kik a:hover{border-color:var(--gold); background:rgba(176,132,85,.08)}
 .kik img{width:34px; height:34px; border-radius:50%; object-fit:cover; aspect-ratio:1}
-.ar-megj{margin-top:24px; padding:16px 20px; border-left:2px solid var(--gold); background:rgba(205,162,58,.08); font-size:15px; color:var(--espresso)}
+.ar-megj{margin-top:24px; padding:16px 20px; border-left:2px solid var(--gold); background:rgba(176,132,85,.08); font-size:15px; color:var(--espresso)}
 
 /* ── ártáblák ─────────────────────────────────────────────── */
 .arak{margin-top:clamp(36px,4vw,54px)}
@@ -502,7 +515,7 @@ html:not(.js) .loader{display:none}
 .field .sugo{font-size:13.5px; color:var(--muted); margin-top:8px}
 .factions{grid-column:1 / -1; display:flex; align-items:center; gap:18px; flex-wrap:wrap}
 .factions .small{margin:0; max-width:46ch}
-.fmsg{grid-column:1 / -1; padding:14px 18px; border:1px solid var(--gold); background:rgba(205,162,58,.1); font-size:15px}
+.fmsg{grid-column:1 / -1; padding:14px 18px; border:1px solid var(--gold); background:rgba(176,132,85,.1); font-size:15px}
 .fmsg[hidden]{display:none}
 
 .terkep{position:relative; border:1px solid var(--line); padding:9px; background:var(--ivory)}
@@ -523,7 +536,7 @@ html:not(.js) .loader{display:none}
 .foot a{text-decoration:none; color:#E4DCCF; transition:color .3s}
 .foot a:hover{color:var(--gold-lt)}
 .foot-nev{color:var(--dark-muted); margin-right:6px}
-.foot-base{margin-top:clamp(38px,4vw,56px); padding-top:22px; border-top:1px solid rgba(205,162,58,.24); display:flex; justify-content:space-between; gap:18px; flex-wrap:wrap; font-size:13px; letter-spacing:.06em; color:#9A8E7E}
+.foot-base{margin-top:clamp(38px,4vw,56px); padding-top:22px; border-top:1px solid rgba(176,132,85,.24); display:flex; justify-content:space-between; gap:18px; flex-wrap:wrap; font-size:13px; letter-spacing:.06em; color:#9A8E7E}
 
 /* ============================================================
    REVEAL — kétirányú (IntersectionObserver toggle, nem egyszeri)
@@ -617,7 +630,7 @@ html:not(.js) .loader{display:none}
    Logó: a fénycsík a logó alakjára maszkolva fut végig.
    ============================================================ */
 :root{
-  --foil: linear-gradient(115deg, #EDCF6A 0%, #CDA23A 28%, #B08A1E 48%, #D9B24A 68%, #F2D57E 86%, #C99A2E 100%);
+  --foil: linear-gradient(115deg, #DDB48A 0%, #B08455 28%, #8E6238 48%, #C0915F 68%, #E2BF95 86%, #A6774A 100%);
 }
 
 /* szöveg — világos alapon (sötét arany, a fény is olvasható marad) */
@@ -626,20 +639,20 @@ html:not(.js) .loader{display:none}
 .ar-ful span, .ar-egyedul span, .ar-csop h3, .ar-tabla th, .kurzus .ido, .tv .ki, .colophon .k,
 .fk .terulet-cimke, .field label, .fl-hetnapok span, .fl-osszegzes dt, .fl-modosit,
 .intro-body > p:not(.lead):first-of-type::first-letter{
-  background-image:linear-gradient(100deg, var(--gold-dp) 0 40%, #A8841C 46%, #D2AC3C 50%, #A8841C 54%, var(--gold-dp) 60% 100%);
+  background-image:linear-gradient(100deg, var(--gold-dp) 0 40%, #94693F 46%, #C4935F 50%, #94693F 54%, var(--gold-dp) 60% 100%);
   background-size:300% 100%; background-repeat:no-repeat;
   -webkit-background-clip:text; background-clip:text; color:transparent;
   animation:aranyFeny 7s ease-in-out infinite;
 }
 /* a nagy iniciálé világosabb aranyból indul */
 .intro-body > p:not(.lead):first-of-type::first-letter{
-  background-image:linear-gradient(100deg, var(--gold) 0 40%, #E2BF55 46%, #FFF0B8 50%, #E2BF55 54%, var(--gold) 60% 100%);
+  background-image:linear-gradient(100deg, var(--gold) 0 40%, #CFA474 46%, #F6E3C8 50%, #CFA474 54%, var(--gold) 60% 100%);
 }
 /* szöveg — sötét alapon */
 .sec-dark .eyebrow, .split .pane-txt .eyebrow, .cell-dark .idx, .cell-dark .kik,
 .chip[aria-pressed="true"] .db, .nav a[aria-current], .head-tel, .mobil-tel, .lb-bar .n,
 .foot-h{
-  background-image:linear-gradient(100deg, var(--gold-lt) 0 40%, #F7DF93 46%, #FFF6D6 50%, #F7DF93 54%, var(--gold-lt) 60% 100%);
+  background-image:linear-gradient(100deg, var(--gold-lt) 0 40%, #E9CBA4 46%, #FBEDDC 50%, #E9CBA4 54%, var(--gold-lt) 60% 100%);
   background-size:300% 100%; background-repeat:no-repeat;
   -webkit-background-clip:text; background-clip:text; color:transparent;
   animation:aranyFeny 7s ease-in-out infinite;
@@ -669,7 +682,7 @@ html:not(.js) .loader{display:none}
 
 /* medalion-gyűrű: lassan hullámzó csillogás */
 .ring{
-  background:linear-gradient(140deg, #F2D57E, #CDA23A 25%, #8F6D14 45%, #E8C766 60%, #B08A1E 78%, #F2D57E);
+  background:linear-gradient(140deg, #E2BF95, #B08455 25%, #7A5530 45%, #D8B488 60%, #8E6238 78%, #E2BF95);
   background-size:220% 220%;
   animation:gyuruFeny 8s ease-in-out infinite alternate;
 }
