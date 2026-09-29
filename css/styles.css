@@ -710,3 +710,20 @@ html:not(.js) .loader{display:none}
   .brand::after, .hero-logo::after, .foot-logo::after, [class], .intro-body p::first-letter{animation:none !important}
   .brand::after, .hero-logo::after, .foot-logo::after, .btn::after{display:none}
 }
+
+/* ============================================================
+   ADATKEZELÉSI TÁJÉKOZTATÓ — nyugodt, jól olvasható jogi szöveg
+   ============================================================ */
+.jogi{padding-bottom:clamp(20px,3vw,40px)}
+.jogi h2{font-size:clamp(22px,2.2vw,28px); margin:clamp(34px,4vw,50px) 0 14px}
+.jogi h2:first-child{margin-top:0}
+.jogi p, .jogi li{font-size:16.5px; line-height:1.75; color:var(--espresso)}
+.jogi p{margin:0 0 12px}
+.jogi ul{margin:0 0 14px; padding-left:1.2em}
+.jogi li{margin-bottom:6px}
+.jogi li::marker{color:var(--gold-dp)}
+.jogi a{color:var(--gold-dp); text-decoration:underline; text-underline-offset:3px; overflow-wrap:anywhere}
+.jogi .hataly{margin-top:clamp(30px,4vw,44px); font-size:14px; color:var(--muted)}
+.jogi mark.hianyzik{background:#FFE7A3; color:#5A3A00; padding:1px 6px; font-weight:600}
+.foot-base a{color:inherit; text-decoration:underline; text-underline-offset:3px}
+.fgdpr a{color:var(--gold-dp); text-decoration:underline}

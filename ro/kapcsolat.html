@@ -23,9 +23,10 @@
 <meta name="theme-color" content="#14110E">
 <link rel="icon" type="image/png" sizes="32x32" href="../img/logo/favicon-32.png">
 <link rel="apple-touch-icon" href="../img/logo/favicon-180.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Karla:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<!-- betűk saját tárhelyről (adatvédelem: nincs Google Fonts-kérés) -->
+<link rel="preload" href="../fonts/karla-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../fonts/marcellus-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../css/fonts.css">
 <link rel="stylesheet" href="../css/styles.css">
 <link rel="stylesheet" href="../css/foglalo.css">
 <script>document.documentElement.classList.add('js');try{if(sessionStorage.getItem('aph-betoltve'))document.documentElement.classList.add('mar-jart')}catch(e){}</script>
@@ -171,7 +172,7 @@
               <div class="fl-csapda" aria-hidden="true"><label for="fl-web">Website</label><input id="fl-web" name="weboldal" type="text" tabindex="-1" autocomplete="off"></div>
               <label class="fgdpr" for="fl-gdpr">
                 <input id="fl-gdpr" name="hozzajarul" type="checkbox" required>
-                <span>Sunt de acord ca salonul să folosească datele mele pentru stabilirea și confirmarea programării. Nu le transmitem terților.</span>
+                <span>Sunt de acord ca salonul să folosească datele mele pentru stabilirea și confirmarea programării. Detalii: <a href="adatkezeles.html" target="_blank">politica de confidențialitate</a>.</span>
               </label>
               <div class="factions">
                 <button class="btn btn-solid" type="submit" data-kuld>Trimite cererea de programare</button>
@@ -338,7 +339,7 @@
     </div>
     <div class="foot-base">
       <span>© <span data-ev>2026</span> Salon Aphrodite</span>
-      <span>Strada Bethlen Gábor 45/5, Odorheiu Secuiesc</span>
+      <span>Strada Bethlen Gábor 45/5, Odorheiu Secuiesc · <a href="adatkezeles.html">Politica de confidențialitate</a></span>
     </div>
   </div>
 </footer>
