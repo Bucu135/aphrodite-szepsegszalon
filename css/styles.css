@@ -274,7 +274,7 @@ html:not(.js) .loader{display:none}
 /* ============================================================
    VITRIN — szolgáltatás-rács
    ============================================================ */
-.vitrin{display:grid; grid-template-columns:repeat(4,1fr); border-top:1px solid var(--line); border-left:1px solid var(--line)}
+.vitrin{display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); border-top:1px solid var(--line); border-left:1px solid var(--line)}
 .cell{
   display:flex; flex-direction:column; text-decoration:none; color:inherit;
   border-right:1px solid var(--line); border-bottom:1px solid var(--line);
@@ -284,13 +284,13 @@ html:not(.js) .loader{display:none}
 .cell:hover{background:rgba(176,132,85,.08)}
 .cell .idx{font-family:var(--f-disp); font-size:13px; letter-spacing:.24em; color:var(--gold-dp); margin-bottom:18px; transition:transform .5s var(--ease)}
 .cell:hover .idx{transform:translateX(5px)}
-.cell h3{margin-bottom:12px}
+.cell h3{margin-bottom:12px; font-size:clamp(19px,1.65vw,24px)}   /* a „Sminktetoválás” 1440 px-en is egy sorban */
 .cell p{font-size:15.5px; line-height:1.66; color:var(--muted); margin:0 0 18px}
 .cell .kik{margin-top:auto; font-size:12px; font-weight:600; letter-spacing:.14em; text-transform:uppercase; color:var(--gold-dp); line-height:1.6}
 .cell .nyil{position:absolute; right:22px; top:26px; width:18px; height:18px; opacity:0; transform:translateX(-6px); transition:opacity .4s, transform .5s var(--ease)}
 .cell .nyil::before{content:''; position:absolute; inset:5px 3px 5px 0; border-top:1px solid var(--gold); border-right:1px solid var(--gold); transform:rotate(45deg)}
 .cell:hover .nyil{opacity:1; transform:none}
-.cell-dark{background:var(--ink); color:var(--ivory)}
+.cell-dark{background:var(--ink); color:var(--ivory); grid-column:span 2}   /* a két képzés (10-05): az utolsó sorban, fél-fél szélességben */
 .cell-dark:hover{background:var(--espresso)}
 .cell-dark p{color:var(--dark-muted)}
 .cell-dark .idx,.cell-dark .kik{color:var(--gold-lt)}
@@ -586,7 +586,8 @@ html:not(.js) .loader{display:none}
 @media (max-width:1180px){
   .nav ul{gap:18px}
   .head-tel{display:none}
-  .vitrin{grid-template-columns:repeat(2,1fr)}
+  .vitrin{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .vitrin .cell-dark{grid-column:auto}
   .foglal-grid{grid-template-columns:repeat(3,1fr)}
   .foot-grid{grid-template-columns:1fr 1fr}
 }
