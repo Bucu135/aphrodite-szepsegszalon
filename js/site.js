@@ -265,7 +265,8 @@
     lbImg.src = img.getAttribute('data-nagy') || img.currentSrc || img.src;
     lbImg.alt = img.alt;
     $('.n', lb).textContent = ($('.n', fig) || {}).textContent || '';
-    lbCim.textContent = img.alt + (fig.getAttribute('data-ki') ? ' · ' + T(fig.getAttribute('data-ki') + ' munkája', 'lucrare de ' + fig.getAttribute('data-ki')) : '');
+    var kiK = fig.getAttribute('data-ki');
+    lbCim.textContent = [fig.hasAttribute('data-csak-ki') ? '' : img.alt, kiK ? T(kiK + ' munkája', 'lucrare de ' + kiK) : ''].filter(Boolean).join(' · ');
     lbSzam.textContent = (hol + 1) + ' / ' + lista.length;
   }
   function lbNyit(fig) {
