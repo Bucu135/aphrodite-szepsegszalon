@@ -254,6 +254,25 @@ html:not(.js) .loader{display:none}
 .chip[aria-pressed="true"]{background:var(--ink); color:var(--ivory); border-color:var(--ink)}
 .chip .db{color:var(--gold-dp); margin-left:6px}
 .chip[aria-pressed="true"] .db{color:var(--gold-lt)}
+.chip[hidden]{display:none}
+/* Munkáink: „Kinek a munkái" választó (10-05) */
+.szuro-cim{display:block; margin-top:34px}
+.szuro-cim + .ki-valaszto, .szuro-cim + .chips{margin-top:14px}
+.ki-valaszto{display:flex; flex-wrap:wrap; justify-content:center; gap:10px 12px}
+.ki-gomb{
+  display:inline-flex; align-items:center; gap:10px; font:inherit; font-size:15px; color:var(--ink);
+  padding:5px 16px 5px 5px; border:1px solid var(--line); border-radius:40px; background:transparent; cursor:pointer;
+  transition:border-color .3s, background .3s, color .3s;
+}
+.ki-gomb:hover{border-color:var(--gold); background:rgba(176,132,85,.08)}
+.ki-gomb img{width:38px; height:38px; border-radius:50%; object-fit:cover; aspect-ratio:1}
+.ki-gomb .ki-mind{width:38px; height:38px; border-radius:50%; display:grid; place-items:center; background:rgba(176,132,85,.14); color:var(--gold-dp); font-size:15px}
+.ki-gomb .db{font-size:12px; color:var(--gold-dp)}
+.ki-gomb[aria-pressed="true"]{background:var(--ink); color:var(--ivory); border-color:var(--ink)}
+.ki-gomb[aria-pressed="true"] .db{color:var(--gold-lt)}
+.ki-gomb[aria-pressed="true"] img{box-shadow:0 0 0 2px var(--gold-lt)}
+.gal-ures{grid-column:1 / -1; text-align:center; color:var(--muted)}
+.gal-ures[hidden]{display:none}
 
 /* ============================================================
    A SZALON — bemutatkozás + csapatkép

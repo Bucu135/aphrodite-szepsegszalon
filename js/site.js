@@ -177,17 +177,56 @@
     });
   });
 
-  /* ── galéria-szűrő ── */
-  var szurok = $$('[data-szuro]');
+  /* ── galéria-szűrő: kinek a munkái × kategória (10-05) ── */
+  var szurok = $$('[data-szuro]'), kiGombok = $$('[data-ki-szuro]');
+  var szures = { ki: '*', kat: '*' };
+  function szurAlkalmaz() {
+    var kepek = $$('[data-galeria] .gal-item'), latszik = 0, katDb = {};
+    kepek.forEach(function (f) {
+      var kiOk = szures.ki === '*' || f.getAttribute('data-szerzo') === szures.ki;
+      var k = f.getAttribute('data-kat');
+      if (kiOk) katDb[k] = (katDb[k] || 0) + 1;
+      f.hidden = !(kiOk && (szures.kat === '*' || k === szures.kat));
+      if (!f.hidden) latszik++;
+    });
+    // a kategória-gombok darabszáma a kiválasztott emberhez igazodik; amiben nincs munkája, eltűnik
+    var osszDb = 0;
+    szurok.forEach(function (sz) {
+      var k = sz.getAttribute('data-szuro'), n = k === '*' ? 0 : (katDb[k] || 0);
+      osszDb += n;
+      if (k !== '*') { sz.hidden = !n; var d = sz.querySelector('.db'); if (d) d.textContent = n; }
+      sz.setAttribute('aria-pressed', String(k === szures.kat));
+    });
+    var mind = szurok.filter(function (sz) { return sz.getAttribute('data-szuro') === '*'; })[0];
+    if (mind) { var md = mind.querySelector('.db'); if (md) md.textContent = osszDb; }
+    kiGombok.forEach(function (g) { g.setAttribute('aria-pressed', String(g.getAttribute('data-ki-szuro') === szures.ki)); });
+    $$('[data-galeria] .gal-kat').forEach(function (h) {
+      var k = h.getAttribute('data-kat');
+      h.hidden = !(katDb[k] && (szures.kat === '*' || k === szures.kat));
+    });
+    var ures = $('.gal-ures');
+    if (ures) ures.hidden = latszik > 0;
+  }
   szurok.forEach(function (sz) {
-    sz.addEventListener('click', function () {
-      var kat = sz.getAttribute('data-szuro');
-      szurok.forEach(function (x) { x.setAttribute('aria-pressed', String(x === sz)); });
-      $$('[data-galeria] [data-kat]').forEach(function (el) {
-        el.hidden = !(kat === '*' || el.getAttribute('data-kat') === kat);
+    sz.addEventListener('click', function () { szures.kat = sz.getAttribute('data-szuro'); szurAlkalmaz(); });
+  });
+  kiGombok.forEach(function (g) {
+    g.addEventListener('click', function () {
+      szures.ki = g.getAttribute('data-ki-szuro');
+      // ha a választott kategóriában az új embernek nincs munkája, vissza a „Mind"-re
+      var van = $$('[data-galeria] .gal-item').some(function (f) {
+        return (szures.ki === '*' || f.getAttribute('data-szerzo') === szures.ki) && (szures.kat === '*' || f.getAttribute('data-kat') === szures.kat);
       });
+      if (!van) szures.kat = '*';
+      szurAlkalmaz();
+      try { history.replaceState(null, '', szures.ki === '*' ? location.pathname : '#ki=' + szures.ki); } catch (e) {}
     });
   });
+  // munkaink.html#ki=klara → rögtön Klára munkái
+  var kiHash = /^#ki=([a-z]+)$/.exec(location.hash);
+  if (kiHash && kiGombok.some(function (g) { return g.getAttribute('data-ki-szuro') === kiHash[1]; })) {
+    szures.ki = kiHash[1]; szurAlkalmaz();
+  }
 
   /* ── lightbox ── */
   var lb, lbImg, lbCim, lbSzam, lista = [], hol = 0;
