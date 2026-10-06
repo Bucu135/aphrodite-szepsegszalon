@@ -61,7 +61,7 @@ h1,h2,h3,h4{font-family:var(--f-disp); font-weight:400; margin:0; letter-spacing
 /* A Marcellusnak csak egy vastagsága van: leheletnyi, betűszínű körvonal teszi testesebbé (a forma nem változik).
    Az arany, átlátszó színű (csillogó) szövegeken a körvonal is átlátszó, ott nem hat. */
 h1,h2,h3,h4,.stat .n,.ar-sor .ar,.ar-tabla td,.kurzus .ar,.fk .tel,.bio-txt blockquote,.tv blockquote,
-.ar-ful b,.ar-egyedul b,.mobil-menu nav a,.fl-honap b{-webkit-text-stroke:.018em currentColor}
+.mobil-menu nav a,.fl-honap b{-webkit-text-stroke:.018em currentColor}
 /* magyar ékezetek: többsoros verzál címnél a sormagasság ne menjen 1.16 alá */
 h1{font-size:clamp(34px,5.4vw,68px); line-height:1.16; text-transform:uppercase}
 h2{font-size:clamp(30px,4vw,52px); line-height:1.18; text-transform:uppercase}
@@ -465,23 +465,16 @@ html:not(.js) .loader{display:none}
 .t-lista span{display:block; font-size:14.5px; color:var(--muted)}
 .kik{display:flex; flex-wrap:wrap; gap:10px 12px; margin-top:26px; align-items:center}
 .kik .eyebrow{margin-right:6px}
-.kik a{display:inline-flex; align-items:center; gap:10px; text-decoration:none; font-size:14.5px; padding:5px 14px 5px 5px; border:1px solid var(--line); border-radius:40px; transition:border-color .3s, background .3s}
-.kik a:hover{border-color:var(--gold); background:rgba(176,132,85,.08)}
+/* a név gomb: alatta nyílik az árlistája (10-06) */
+.kik-nev{display:inline-flex; align-items:center; gap:10px; font:inherit; font-size:14.5px; color:var(--ink); cursor:pointer; padding:5px 16px 5px 5px; background:none; border:1px solid var(--line); border-radius:40px; transition:border-color .3s, background .3s}
+.kik-nev:hover{border-color:var(--gold); background:rgba(176,132,85,.08)}
+.kik-nev[aria-expanded="true"]{border-color:var(--gold); background:rgba(176,132,85,.14); font-weight:600}
+.kik-nev .nyil{width:7px; height:7px; margin-left:2px; border-right:1.5px solid var(--gold-dp); border-bottom:1.5px solid var(--gold-dp); transform:translateY(-2px) rotate(45deg); transition:transform .35s var(--ease)}
+.kik-nev[aria-expanded="true"] .nyil{transform:translateY(2px) rotate(-135deg)}
 .kik img{width:34px; height:34px; border-radius:50%; object-fit:cover; aspect-ratio:1}
-.ar-megj{margin-top:24px; padding:16px 20px; border-left:2px solid var(--gold); background:rgba(176,132,85,.08); font-size:15px; color:var(--espresso)}
+.kik-arak .ar-panel{margin-top:18px}
 
 /* ── ártáblák ─────────────────────────────────────────────── */
-.arak{margin-top:clamp(36px,4vw,54px)}
-.ar-fulek{display:flex; flex-wrap:wrap; gap:0; border-bottom:1px solid var(--line); margin-bottom:6px}
-.ar-ful{background:none; border:0; border-bottom:2px solid transparent; margin-bottom:-1px; padding:12px 18px 12px 0; margin-right:22px; cursor:pointer; text-align:left}
-.ar-ful b{display:block; font-family:var(--f-disp); font-weight:400; font-size:clamp(17px,1.6vw,20px); letter-spacing:.05em; color:var(--muted); transition:color .3s}
-.ar-ful span{display:block; font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--gold-dp)}
-.ar-ful[aria-selected="true"]{border-bottom-color:var(--gold)}
-.ar-ful[aria-selected="true"] b{color:var(--ink)}
-.ar-lap[hidden]{display:none}
-.ar-egyedul{border-bottom:1px solid var(--line); padding-bottom:12px; margin-bottom:6px}
-.ar-egyedul b{font-family:var(--f-disp); font-weight:400; font-size:clamp(17px,1.6vw,20px); letter-spacing:.05em}
-.ar-egyedul span{display:block; font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--gold-dp)}
 .ar-csop{margin-top:26px}
 .ar-csop h3{font-size:15px; font-family:var(--f-body); font-weight:600; letter-spacing:.2em; color:var(--gold-dp); margin-bottom:6px}
 /* az ár egyedül áll a jobb szélen; az időtartam a név mellé kerül (két szám ne kerüljön egymás fölé) */
@@ -683,7 +676,7 @@ html:not(.js) .loader{display:none}
 /* szöveg — világos alapon (sötét arany, a fény is olvasható marad) */
 .eyebrow, .ornament, .link, .arch figcaption, .chip .db, .meta-row dt, .cell .idx, .cell .kik,
 .medal .role, .gal-item figcaption .n, .gal-item figcaption .ki, .t-txt .idx,
-.ar-ful span, .ar-egyedul span, .ar-csop h3, .ar-tabla th, .kurzus .ido, .tv .ki, .colophon .k,
+.ar-csop h3, .ar-tabla th, .kurzus .ido, .tv .ki, .colophon .k,
 .fk .terulet-cimke, .field label, .fl-hetnapok span, .fl-osszegzes dt, .fl-modosit,
 .intro-body > p:not(.lead):first-of-type::first-letter{
   background-image:linear-gradient(100deg, var(--gold-dp) 0 40%, #94693F 46%, #C4935F 50%, #94693F 54%, var(--gold-dp) 60% 100%);

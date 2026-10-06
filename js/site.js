@@ -154,25 +154,32 @@
     window.addEventListener('resize', function () { if (nyitott) helyez(nyitott.panel, nyitott.gomb); });
   }
 
-  /* ── árlista-fülek (Katalin / Gabi és Zsuzsa) — nyilakkal is ── */
-  $$('[data-fulek]').forEach(function (blokk) {
-    var fulek = $$('[role="tab"]', blokk);
-    function valaszt(i, fokusz) {
-      fulek.forEach(function (f, j) {
-        var ez = i === j;
-        f.setAttribute('aria-selected', String(ez));
-        f.tabIndex = ez ? 0 : -1;
-        document.getElementById(f.getAttribute('aria-controls')).hidden = !ez;
+  /* ── Szolgáltatások, „Kihez fordulj”: a névre kattintva alatta az ő árlistája (10-06) ──
+     Területenként egyszerre egy nyitott; a nyitott nevére újra kattintva bezárul. */
+  $$('[data-kik-arak]').forEach(function (blokk) {
+    var gombok = $$('.kik-nev', blokk);
+    var panelje = function (g) { return document.getElementById(g.getAttribute('aria-controls')); };
+    var mutat = function (cel) {
+      gombok.forEach(function (g) {
+        var ez = g === cel;
+        g.setAttribute('aria-expanded', String(ez));
+        panelje(g).hidden = !ez;
       });
-      if (fokusz) fulek[i].focus();
-    }
-    fulek.forEach(function (f, i) {
-      f.addEventListener('click', function () { valaszt(i); });
-      f.addEventListener('keydown', function (e) {
-        if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
-          e.preventDefault();
-          valaszt((i + (e.key === 'ArrowRight' ? 1 : fulek.length - 1)) % fulek.length, true);
-        }
+    };
+    gombok.forEach(function (g) {
+      g.addEventListener('click', function () {
+        var nyitva = g.getAttribute('aria-expanded') === 'true';
+        mutat(nyitva ? null : g);
+        if (nyitva) return;
+        var r = panelje(g).getBoundingClientRect();
+        if (r.top > window.innerHeight * 0.66) window.scrollBy({ top: r.top - window.innerHeight * 0.25, behavior: reduce ? 'auto' : 'smooth' });
+      });
+    });
+    $$('[data-ar-zar]', blokk).forEach(function (z) {
+      z.addEventListener('click', function () {
+        var g = gombok.filter(function (x) { return x.getAttribute('aria-expanded') === 'true'; })[0];
+        mutat(null);
+        if (g) g.focus({ preventScroll: true });
       });
     });
   });
