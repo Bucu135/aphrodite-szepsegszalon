@@ -56,6 +56,49 @@
       .then(function (j) { if (j.hiba) throw new Error(j.hiba); return j; });
   }
 
+  /* ── havi sávok: szakemberenként és hónaponként EGY kérés (m=savok), előre betöltve ──
+     A szkript a „Dolgozom" és a foglalt sávokat adja (percben, szalon-idő szerint); a szabad
+     napokat és időpontokat bármelyik szolgáltatásra itt számoljuk — így a szolgáltatás és a nap
+     kiválasztása nem vár a szkriptre. A foglaláskor a szkript úgyis újraellenőriz.
+     Ha a szkript még nem ismeri a savok-kérést (régi verzió), a régi napok/idopontok út megy. */
+  var SAVOK = {};   // 'sz|honap' → Promise<{ savok, ma } | null>
+  function savokKer(sz, honap) {
+    var k = sz + '|' + honap;
+    if (!SAVOK[k]) {
+      SAVOK[k] = api({ m: 'savok', sz: sz, honap: honap })
+        .then(function (j) { return j.savok ? j : null; })
+        .catch(function () { delete SAVOK[k]; return null; });
+    }
+    return SAVOK[k];
+  }
+  function savokFelejt() { SAVOK = {}; all.havi = null; }
+  // fal-óra percben a szalon időzónájában: napsorszám × 1440 + perc (a látogató időzónájától független)
+  function falPerc(datum, perc) { var p = datum.split('-'); return Date.UTC(+p[0], p[1] - 1, +p[2]) / 60000 + perc; }
+  function mostFal() {
+    try {
+      var r = {};
+      new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/Bucharest', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' })
+        .formatToParts(new Date()).forEach(function (x) { r[x.type] = x.value; });
+      return falPerc(r.year + '-' + r.month + '-' + r.day, +r.hour * 60 + +r.minute);
+    } catch (e) { var d = new Date(); return falPerc(datumStr(d), d.getHours() * 60 + d.getMinutes()); }
+  }
+  // ugyanaz a szabály, mint az idosavok.mjs szabadIdopontok-ja (a szkriptben), percekben, egy napra
+  function szabadNap(nap, datum, hossz) {
+    var hatar = mostFal() + ADAT.minElore, ki = [], ossz = [];
+    nap.m.slice().sort(function (a, b) { return a[0] - b[0]; }).forEach(function (s) {
+      var u = ossz[ossz.length - 1];
+      if (u && s[0] <= u[1]) u[1] = Math.max(u[1], s[1]); else ossz.push([s[0], s[1]]);
+    });
+    ossz.forEach(function (s) {
+      for (var t = s[0]; t + hossz <= s[1]; t += ADAT.lepes) {
+        if (falPerc(datum, t) < hatar) continue;
+        if (nap.f.some(function (f) { return t < f[1] && t + hossz > f[0]; })) continue;
+        ki.push(pad(Math.floor(t / 60)) + ':' + pad(t % 60));
+      }
+    });
+    return ki;
+  }
+
   function nincs() {
     $('.fl-lepesek').hidden = true;
     $('.fl-test').hidden = true;
@@ -126,17 +169,32 @@
     $('[data-honap-cim]').textContent = RO ? HONAPOK[h.getMonth()] + ' ' + h.getFullYear() : h.getFullYear() + '. ' + HONAPOK[h.getMonth()];
     $('[data-honap="-1"]').disabled = all.honap <= honapStr(ma());
     $('[data-honap="1"]').disabled = all.honap >= honapStr(utolsoNap());
+    all.havi = null;
     napokRajzol(true);
     savokRajzol();
-    api({ m: 'napok', sz: all.sz, s: all.s, honap: all.honap }).then(function (j) {
+    var hossz = szolg().perc;
+    savokKer(all.sz, all.honap).then(function (j) {
       if (sajat !== keresSzam) return;
-      all.napok = j.napok || {};
-      napokRajzol(false);
-      // ha a hónapban nincs szabad nap, mondjuk meg, és kínáljuk a következőt
-      if (!Object.keys(all.napok).length) {
-        $('[data-savok-cim]').textContent = T('Ebben a hónapban nincs szabad időpont', 'În această lună nu mai sunt ore libere') + (all.honap < honapStr(utolsoNap()) ? T(' — nézd meg a következőt.', ' — vezi luna următoare.') : '.');
+      if (!j) {   // régi szkript: a hónap napjait a szkript számolja
+        api({ m: 'napok', sz: all.sz, s: all.s, honap: all.honap }).then(function (r) {
+          if (sajat === keresSzam) napokKesz(r.napok || {});
+        }).catch(hiba);
+        return;
       }
-    }).catch(hiba);
+      all.havi = j.savok;
+      var napok = {};
+      Object.keys(j.savok).forEach(function (d) { var db = szabadNap(j.savok[d], d, hossz).length; if (db) napok[d] = db; });
+      napokKesz(napok);
+    });
+  }
+
+  function napokKesz(napok) {
+    all.napok = napok;
+    napokRajzol(false);
+    // ha a hónapban nincs szabad nap, mondjuk meg, és kínáljuk a következőt
+    if (!Object.keys(all.napok).length) {
+      $('[data-savok-cim]').textContent = T('Ebben a hónapban nincs szabad időpont', 'În această lună nu mai sunt ore libere') + (all.honap < honapStr(utolsoNap()) ? T(' — nézd meg a következőt.', ' — vezi luna următoare.') : '.');
+    }
   }
 
   function napokRajzol(tolt) {
@@ -173,6 +231,7 @@
   }
 
   function savokBetolt() {
+    if (all.havi) { savokRajzol(all.havi[all.datum] ? szabadNap(all.havi[all.datum], all.datum, szolg().perc) : []); return; }
     var sajat = ++keresSzam;
     $('[data-savok-cim]').textContent = T('Szabad időpontok betöltése…', 'Se încarcă orele libere…');
     $('[data-savok]').innerHTML = '';
@@ -224,7 +283,13 @@
       .then(function (j) {
         kuldGomb.disabled = false; kuldGomb.textContent = T('Foglalási kérés elküldése', 'Trimite cererea de programare');
         if (j.hiba) {
-          if (j.frissit) { all.ido = null; lepes(3, true); savokBetolt(); $('[data-savok-cim]').textContent = j.hiba; return; }
+          // közben elkelt az időpont: friss sávok a szkriptből, és a nap újra
+          if (j.frissit) {
+            var nap = all.datum; all.ido = null; savokFelejt(); lepes(3, true); honapBetolt();
+            var uzen = j.hiba;
+            savokKer(all.sz, all.honap).then(function () { all.datum = nap; savokBetolt(); $('[data-savok-cim]').textContent = uzen; });
+            return;
+          }
           jelez(j.hiba); return;
         }
         var sz = ADAT.nevek[all.sz];
@@ -232,6 +297,7 @@
           '). Hamarosan visszaigazolja — a visszaigazolást a(z) ' + torzs.email + ' címre küldjük.',
           'Cererea ta rezervă ora în calendarul lui ' + sz.nev + ' (' + szepDatum(all.datum) + ', ' + all.ido +
           '). Îți va confirma în curând — confirmarea o trimitem la adresa ' + torzs.email + '.');
+        savokFelejt();   // a most foglalt időpont már ne látsszon szabadnak
         lepes('kesz');
         var k = $('[data-lepes="kesz"]'); k.focus({ preventScroll: true });
         window.scrollTo({ top: gyoker.getBoundingClientRect().top + window.scrollY - 90, behavior: 'smooth' });
@@ -259,6 +325,16 @@
   function hiba() {
     $('[data-savok-cim]').textContent = T('Az időpontokat most nem sikerült betölteni. Próbáld újra, vagy hívd a szakembert.', 'Orele nu au putut fi încărcate. Încearcă din nou sau sună specialistul.');
   }
+
+  /* előtöltés: az online szakemberek e havi (és ha belefér, a következő havi) sávjai már az oldal
+     betöltésekor elindulnak, hogy mire a vendég a naptárhoz ér, ne kelljen várnia */
+  (function () {
+    var most = honapStr(ma()), kov = new Date(ma()); kov.setDate(1); kov.setMonth(kov.getMonth() + 1);
+    Object.keys(ADAT.szakemberek).forEach(function (sz) {
+      savokKer(sz, most);
+      if (honapStr(kov) <= honapStr(utolsoNap())) savokKer(sz, honapStr(kov));
+    });
+  })();
 
   /* előre kiválasztott szakember: kapcsolat.html?sz=barbi#foglalo */
   if (q.get('sz') && ADAT.szakemberek[q.get('sz')]) szakemberValaszt(q.get('sz'), false);
