@@ -95,7 +95,7 @@
     if (!ADAT.szakemberek[sz]) return;
     if (all.sz !== sz) { all.s = null; all.datum = null; all.ido = null; }
     all.sz = sz;
-    $$('.fl-ember').forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-sz') === sz)); });
+    $$('.fl-ember[data-sz]').forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-sz') === sz)); });
     var lista = ADAT.szakemberek[sz].szolg;
     $('[data-szolg-lista]').innerHTML = lista.map(function (x) {
       return '<button type="button" class="fl-szolg-sor" data-s="' + x.id + '" aria-pressed="' + (x.id === all.s) + '">' +
@@ -106,7 +106,7 @@
     if (lista.length === 1) szolgValaszt(lista[0].id, fokusz);   // Kláránál egyetlen tétel: lépjünk tovább
     else lepes(2, fokusz);
   }
-  $$('.fl-ember').forEach(function (b) {
+  $$('.fl-ember[data-sz]').forEach(function (b) {
     b.addEventListener('click', function () { szakemberValaszt(b.getAttribute('data-sz'), true); });
   });
 

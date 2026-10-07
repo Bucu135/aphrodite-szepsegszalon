@@ -24,6 +24,11 @@
 .fl-ember .ring{width:88px; padding:4px; margin:0 0 8px; box-shadow:none}
 .fl-ember-nev{font-family:var(--f-disp); font-size:16px; letter-spacing:.03em; line-height:1.3}
 .fl-ember-szerep{font-size:12.5px; line-height:1.45; color:var(--muted)}
+.fl-ember-tel{cursor:default; border-style:dashed}
+.fl-ember-tel:hover{border-color:var(--line-soft)}
+.fl-ember-tel .ring{opacity:.6}
+.fl-ember-linkek{font-size:13px; margin-top:2px}
+.fl-ember-linkek a{color:var(--ink); text-decoration:underline; text-underline-offset:3px}
 
 /* 2 · szolgáltatás — az ár egyedül a jobb szélen */
 .fl-szolg{display:grid; border-top:1px solid var(--line)}
