@@ -30,15 +30,36 @@
 .fl-ember-linkek{font-size:13px; margin-top:2px}
 .fl-ember-linkek a{color:var(--ink); text-decoration:underline; text-underline-offset:3px}
 
-/* 2 · szolgáltatás — az ár egyedül a jobb szélen */
+/* 2 · szolgáltatás(ok) — jelölőnégyzetek, az ár egyedül a jobb szélen; több is kijelölhető */
 .fl-szolg{display:grid; border-top:1px solid var(--line)}
-.fl-szolg-sor{display:grid; grid-template-columns:1fr auto auto; gap:6px 18px; align-items:baseline; text-align:left; padding:15px 14px; background:transparent; border:0; border-bottom:1px solid var(--line-soft); cursor:pointer; transition:background .3s}
+.fl-szolg-sor{display:grid; grid-template-columns:auto 1fr auto auto; gap:6px 16px; align-items:baseline; text-align:left; padding:15px 14px; background:transparent; border:0; border-bottom:1px solid var(--line-soft); cursor:pointer; transition:background .3s; font:inherit; color:inherit; width:100%}
 .fl-szolg-sor:hover{background:rgba(176,132,85,.08)}
-.fl-szolg-sor[aria-pressed="true"]{background:var(--ink); color:var(--ivory)}
+.fl-szolg-sor.on{background:rgba(176,132,85,.16)}
 .fl-szolg-sor .nev{font-size:16px}
 .fl-szolg-sor .perc{font-size:13.5px; color:var(--muted); white-space:nowrap}
 .fl-szolg-sor .ar{font-size:15px; font-weight:600; white-space:nowrap; text-align:right; min-width:7.5em}
-.fl-szolg-sor[aria-pressed="true"] .perc{color:var(--dark-muted)}
+.fl-szolg-sor input{appearance:none; -webkit-appearance:none; width:18px; height:18px; margin:0; align-self:center; border:1px solid var(--gold-dp); background:#fff; position:relative; cursor:pointer; border-radius:0}
+.fl-szolg-sor input:checked{background:var(--ink); border-color:var(--ink)}
+.fl-szolg-sor input:checked::after{content:''; position:absolute; left:5px; top:1px; width:5px; height:10px; border-right:1.5px solid var(--ivory); border-bottom:1.5px solid var(--ivory); transform:rotate(45deg)}
+.fl-szolg-sor input:focus-visible{outline:2px solid var(--gold); outline-offset:2px}
+/* lenyíló tétel (1D…6D, gyanta-területek): a jelölő helyén nyíl */
+.fl-csop-fej{grid-template-columns:1fr auto auto}
+.fl-csop-fej .nev{display:flex; align-items:baseline; flex-wrap:wrap; gap:0 12px}
+.fl-nyit{width:18px; flex:0 0 18px; align-self:center; height:18px; position:relative}
+.fl-nyit::before{content:''; position:absolute; left:5px; top:3px; width:7px; height:7px; border-right:1.5px solid var(--gold-dp); border-bottom:1.5px solid var(--gold-dp); transform:rotate(45deg); transition:transform .3s}
+.fl-csop-fej[aria-expanded="true"] .fl-nyit::before{transform:translateY(4px) rotate(-135deg)}
+.fl-csop-val{font-size:13.5px; font-weight:600; color:var(--gold-dp)}
+.fl-valt{background:var(--ivory-2); border-bottom:1px solid var(--line-soft); padding:4px 0 8px}
+.fl-valt[hidden]{display:none}
+.fl-valt .fl-szolg-sor{padding:11px 14px 11px 48px; border-bottom:0}
+.fl-valt .fl-szolg-sor .nev{font-size:15px}
+.fl-valt-sugo{margin:8px 14px 2px 48px; font-size:13px; color:var(--muted)}
+.fl-kosar{display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:14px 24px; margin-top:22px}
+.fl-kosar p{margin:0; font-size:15.5px; color:var(--espresso)}
+.fl-kosar .btn:disabled{opacity:.45; cursor:default}
+/* átütemezés: tájékoztató sáv a foglaló fölött */
+.fl-atut{margin:0 0 clamp(20px,3vw,32px); padding:14px 18px; border-left:2px solid var(--gold); background:var(--ivory-2); font-size:15px; line-height:1.6}
+.fl-atut[hidden]{display:none}
 
 /* 3 · naptár és időpontok */
 .fl-idopont{display:grid; grid-template-columns:minmax(0,1.05fr) minmax(0,1fr); gap:clamp(20px,3vw,40px); align-items:start}
@@ -101,10 +122,36 @@
   .fl-emberek{grid-template-columns:1fr 1fr}
   .fl-emberek .fl-ember:last-child{grid-column:1 / -1}
   .fl-idopont{grid-template-columns:1fr}
-  .fl-szolg-sor{grid-template-columns:1fr auto; padding:14px 6px}
-  .fl-szolg-sor .perc{grid-column:1; grid-row:2}
-  .fl-szolg-sor .ar{grid-row:1 / span 2; grid-column:2; align-self:center; min-width:0}
+  .fl-szolg-sor{grid-template-columns:auto 1fr auto; padding:14px 6px; gap:4px 14px}
+  .fl-szolg-sor input{grid-row:1 / span 2}
+  .fl-szolg-sor .perc{grid-column:2; grid-row:2}
+  .fl-szolg-sor .ar{grid-row:1 / span 2; grid-column:3; align-self:center; min-width:0}
+  .fl-csop-fej{grid-template-columns:1fr auto}
+  .fl-csop-fej .perc{grid-column:1; padding-left:30px}
+  .fl-csop-fej .ar{grid-column:2}
+  .fl-valt .fl-szolg-sor{padding:11px 6px 11px 30px}
+  .fl-valt-sugo{margin-left:30px}
+  .fl-kosar .btn{width:100%}
 }
 
 /* a page-hero közvetlenül fölötte van, saját címblokk nélkül — kisebb felső térköz */
 .foglalo-sec{padding-top:clamp(36px,5vw,64px)}
+
+/* ============================================================
+   FOGLALÁS KEZELÉSE (foglalas.html) — a levelek gombjai ide visznek
+   ============================================================ */
+.kezelo-sec{padding-top:clamp(40px,6vw,80px)}
+.kezelo{max-width:620px; margin:0 auto; border:1px solid var(--line); background:var(--ivory); padding:clamp(26px,4vw,48px); text-align:center}
+.kezelo h1{font-size:clamp(26px,3.2vw,36px); margin:20px 0 22px; outline:none}
+.kezelo .lead{max-width:none; margin:0 0 14px}
+.kezelo-adatok{text-align:left; margin:0 0 22px; border-top:1px solid var(--line)}
+.kezelo-adatok > div{display:grid; grid-template-columns:minmax(0,9em) 1fr; gap:4px 18px; padding:12px 4px; border-bottom:1px solid var(--line-soft)}
+.kezelo-adatok dt{font-size:12px; font-weight:600; letter-spacing:.16em; text-transform:uppercase; color:var(--gold-dp); padding-top:3px}
+.kezelo-adatok dd{margin:0; font-size:16px; line-height:1.5}
+.kezelo-gombok{display:flex; flex-wrap:wrap; justify-content:center; gap:12px; margin-top:8px}
+.kezelo-gombok .btn:disabled{opacity:.6; cursor:progress}
+.kezelo-hiba{color:#9A3B2E; margin:12px 0 0}
+@media (max-width:749px){
+  .kezelo-adatok > div{grid-template-columns:1fr}
+  .kezelo-gombok .btn{width:100%}
+}

@@ -1,6 +1,11 @@
 /* ============================================================
    Aphrodite — online foglaló (kliens)
-   Menet: szakember → szolgáltatás → nap + időpont → adatok → kész.
+   Menet: szakember → szolgáltatás(ok) → nap + időpont → adatok → kész.
+   A 2. lépésben több tétel is kijelölhető (az idő és az ár összeadódik);
+   a változatos tételek (1D…6D, gyanta-területek) lenyílnak. A kiválasztás
+   kulcsai: 'pilla-toltes.3d,szemoldok-festes,gyanta.bajusz' — a szkript
+   ugyanezekkel a szabályokkal ellenőriz (kosar_ a Code.gs-ben).
+   Átütemezés: kapcsolat.html?sz=…&atut=<foglalás>&t=<aláírás>#foglalo
    A háttér a szalon Google Apps Scriptje (data-api). GET-tel kérdez
    (napok, időpontok), POST-tal foglal — text/plain törzzsel, hogy ne
    legyen CORS-előkérés (az Apps Script azt nem kezeli).
@@ -28,7 +33,7 @@
   var NAPNEV = RO
     ? ['duminică', 'luni', 'marți', 'miercuri', 'joi', 'vineri', 'sâmbătă']
     : ['vasárnap', 'hétfő', 'kedd', 'szerda', 'csütörtök', 'péntek', 'szombat'];
-  var all = { sz: null, s: null, honap: null, datum: null, ido: null, napok: {} };
+  var all = { sz: null, val: [], s: null, honap: null, datum: null, ido: null, napok: {}, atut: null };
   var keresSzam = 0;   // elavult válaszok eldobásához (gyors kattintgatásnál)
 
   /* ── segédek ── */
@@ -42,7 +47,36 @@
       ? NAPNEV[d.getDay()] + ', ' + d.getDate() + ' ' + HONAPOK[d.getMonth()] + ' ' + d.getFullYear()
       : d.getFullYear() + '. ' + HONAPOK[d.getMonth()] + ' ' + d.getDate() + '., ' + NAPNEV[d.getDay()];
   }
-  function szolg() { return ADAT.szakemberek[all.sz].szolg.filter(function (x) { return x.id === all.s; })[0]; }
+  function lista() { return ADAT.szakemberek[all.sz].szolg; }
+  function tetel(id) { return lista().filter(function (x) { return x.id === id; })[0]; }
+  function sav(lista) { var mi = Math.min.apply(null, lista), ma = Math.max.apply(null, lista); return mi === ma ? String(mi) : mi + '–' + ma; }
+  function arSzoveg(x) {
+    if (x.valt) return sav(x.valt.map(function (v) { return v.ar; })) + ' RON';
+    return x.ar != null ? x.ar + ' RON' : (x.arSz || '');
+  }
+  function percSzoveg(x) {
+    if (x.valt && x.tobb) { var p = x.valt.map(function (v) { return v.perc; }); return sav(p) + T(' perc', ' min'); }
+    return idotartam(x.perc);
+  }
+  /* a kiválasztott tételek összesítve — ugyanúgy, mint a szkript kosar_-ja */
+  function kosar() {
+    var sorok = [], perc = 0, ar = 0, vanAr = true, arSz = null;
+    lista().forEach(function (x) {
+      var t = all.val.filter(function (k) { return k.split('.')[0] === x.id; });
+      if (!t.length) return;
+      var nev = x.nev;
+      if (x.valt) {
+        var v = t.map(function (k) { var id = k.split('.')[1]; return x.valt.filter(function (y) { return y.id === id; })[0]; }).filter(Boolean);
+        nev += (x.tobb ? ': ' : ' ') + v.map(function (y) { return x.tobb ? y.nev.toLowerCase() : y.nev; }).join(', ');
+        v.forEach(function (y) { perc += y.perc; ar += y.ar; });
+      } else {
+        perc += x.perc;
+        if (x.ar == null) { vanAr = false; arSz = x.arSz; } else ar += x.ar;
+      }
+      sorok.push(nev);
+    });
+    return { sorok: sorok, perc: perc, ar: vanAr ? ar + ' RON' : (sorok.length === 1 && arSz ? arSz : '') };
+  }
   function idotartam(p) {
     var o = T(' óra', ' h'), m = T(' perc', ' min');
     return p < 60 ? p + m : (p % 60 ? Math.floor(p / 60) + o + ' ' + (p % 60) + m : (p / 60) + o);
@@ -124,9 +158,9 @@
   }
 
   function osszegzes() {
-    var sz = all.sz && ADAT.nevek[all.sz], sv = all.s && szolg();
+    var sz = all.sz && ADAT.nevek[all.sz], k = all.sz && all.val.length && kosar();
     $('[data-o="sz"]').textContent = sz ? sz.nev : '—';
-    $('[data-o="s"]').textContent = sv ? sv.nev + ' · ' + idotartam(sv.perc) : '—';
+    $('[data-o="s"]').textContent = k ? k.sorok.join(' + ') + ' · ' + idotartam(k.perc) + (k.ar ? ' · ' + k.ar : '') : '—';
     $('[data-o="ido"]').textContent = all.datum && all.ido ? szepDatum(all.datum) + ', ' + all.ido : '—';
     $('[data-vissza="1"]').hidden = !all.sz;
     $('[data-vissza="2"]').hidden = !all.s;
@@ -134,30 +168,92 @@
   }
 
   /* 1 · szakember */
-  function szakemberValaszt(sz, fokusz) {
+  function szakemberValaszt(sz, fokusz, elore) {
     if (!ADAT.szakemberek[sz]) return;
-    if (all.sz !== sz) { all.s = null; all.datum = null; all.ido = null; }
+    if (all.sz !== sz) { all.val = []; all.s = null; all.datum = null; all.ido = null; }
     all.sz = sz;
+    if (elore) all.val = elore.filter(function (k) { return kulcsRendben(k); });
     $$('.fl-ember[data-sz]').forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-sz') === sz)); });
-    var lista = ADAT.szakemberek[sz].szolg;
-    $('[data-szolg-lista]').innerHTML = lista.map(function (x) {
-      return '<button type="button" class="fl-szolg-sor" data-s="' + x.id + '" aria-pressed="' + (x.id === all.s) + '">' +
-        '<span class="nev">' + x.nev + '</span><span class="perc num">' + idotartam(x.perc) + '</span>' +
-        (x.ar ? '<span class="ar num">' + x.ar + '</span>' : '') + '</button>';
-    }).join('');
-    $$('.fl-szolg-sor').forEach(function (b) { b.addEventListener('click', function () { szolgValaszt(b.getAttribute('data-s')); }); });
-    if (lista.length === 1) szolgValaszt(lista[0].id, fokusz);   // Kláránál egyetlen tétel: lépjünk tovább
+    // a megjegyzés súgója: kozmetikusnál allergia/érzékenység, fodrásznál a haj
+    if (ADAT.szakemberek[sz].megjTipp) urlap.elements.megj.placeholder = ADAT.szakemberek[sz].megjTipp;
+    szolgRajzol();
+    var l = lista();
+    if (l.length === 1 && !l[0].valt && !elore) { all.val = [l[0].id]; tovabb(fokusz); }   // Kláránál egyetlen tétel: lépjünk tovább
     else lepes(2, fokusz);
   }
   $$('.fl-ember[data-sz]').forEach(function (b) {
     b.addEventListener('click', function () { szakemberValaszt(b.getAttribute('data-sz'), true); });
   });
 
-  /* 2 · szolgáltatás */
-  function szolgValaszt(s, fokusz) {
+  /* 2 · szolgáltatás(ok): jelölőnégyzetek; a változatos tételek lenyílnak */
+  function kulcsRendben(k) {
+    var r = k.split('.'), x = tetel(r[0]);
+    if (!x) return false;
+    return x.valt ? x.valt.some(function (v) { return v.id === r[1]; }) : r.length === 1;
+  }
+  function jelolo(kulcs, nev, perc, ar) {
+    return '<label class="fl-szolg-sor">' +
+      '<input type="checkbox" value="' + kulcs + '"' + (all.val.indexOf(kulcs) >= 0 ? ' checked' : '') + '>' +
+      '<span class="nev">' + nev + '</span><span class="perc num">' + perc + '</span>' +
+      (ar ? '<span class="ar num">' + ar + '</span>' : '<span class="ar"></span>') + '</label>';
+  }
+  function szolgRajzol() {
+    $('[data-szolg-lista]').innerHTML = lista().map(function (x) {
+      if (!x.valt) return jelolo(x.id, x.nev, idotartam(x.perc), arSzoveg(x));
+      var nyitva = all.val.some(function (k) { return k.split('.')[0] === x.id; });
+      return '<div class="fl-csop">' +
+        '<button type="button" class="fl-szolg-sor fl-csop-fej" aria-expanded="' + nyitva + '" aria-controls="fl-v-' + x.id + '">' +
+        '<span class="nev"><span class="fl-nyit" aria-hidden="true"></span>' + x.nev + '<span class="fl-csop-val" data-csop-val="' + x.id + '"></span></span>' +
+        '<span class="perc num">' + percSzoveg(x) + '</span><span class="ar num">' + arSzoveg(x) + '</span></button>' +
+        '<div class="fl-valt" id="fl-v-' + x.id + '" role="group" aria-label="' + x.nev + '"' + (nyitva ? '' : ' hidden') + '>' +
+        '<p class="fl-valt-sugo">' + (x.tobb ? T('Több is választható.', 'Poți alege mai multe.') : T('Egyet válassz.', 'Alege una.')) + '</p>' +
+        x.valt.map(function (v) { return jelolo(x.id + '.' + v.id, v.nev, x.tobb ? idotartam(v.perc) : '', v.ar + ' RON'); }).join('') +
+        '</div></div>';
+    }).join('');
+    $$('.fl-csop-fej').forEach(function (b) {
+      b.addEventListener('click', function () {
+        var ki = b.getAttribute('aria-expanded') !== 'true';
+        b.setAttribute('aria-expanded', String(ki));
+        $('#' + b.getAttribute('aria-controls')).hidden = !ki;
+      });
+    });
+    $$('[data-szolg-lista] input').forEach(function (i) { i.addEventListener('change', function () { jelolesValt(i); }); });
+    kosarFrissit();
+  }
+  function jelolesValt(i) {
+    var r = i.value.split('.'), x = tetel(r[0]);
+    if (i.checked) {
+      $$('[data-szolg-lista] input:checked').forEach(function (m) {
+        if (m === i) return;
+        var y = tetel(m.value.split('.')[0]);
+        if (y === x && x.valt && !x.tobb) m.checked = false;              // a szempillából egy volumen
+        if (y !== x && x.kizar && y.kizar === x.kizar) m.checked = false; // építés VAGY töltés VAGY lifting
+      });
+    }
+    all.val = $$('[data-szolg-lista] input:checked').map(function (m) { return m.value; });
+    kosarFrissit();
+  }
+  function kosarFrissit() {
+    $$('[data-szolg-lista] input').forEach(function (m) { m.closest('.fl-szolg-sor').classList.toggle('on', m.checked); });
+    lista().forEach(function (x) {
+      if (!x.valt) return;
+      var hely = $('[data-csop-val="' + x.id + '"]'), db = all.val.filter(function (k) { return k.split('.')[0] === x.id; });
+      hely.textContent = db.length ? (x.tobb ? ' · ' + db.length + T(' kijelölve', ' alese') : ' · ' + tetel(x.id).valt.filter(function (v) { return x.id + '.' + v.id === db[0]; })[0].nev) : '';
+    });
+    var k = kosar(), gomb = $('[data-tovabb]');
+    gomb.disabled = !all.val.length;
+    $('[data-kosar]').textContent = all.val.length
+      ? T('Összesen: ', 'Total: ') + idotartam(k.perc) + (k.ar ? ' · ' + k.ar : '')
+      : T('Jelöld ki, amit szeretnél — több is választható.', 'Bifează ce dorești — poți alege mai multe.');
+    osszegzes();
+  }
+  $('[data-tovabb]').addEventListener('click', function () { tovabb(true); });
+
+  function tovabb(fokusz) {
+    if (!all.val.length) return;
+    var s = all.val.join(',');
     if (all.s !== s) { all.datum = null; all.ido = null; }
     all.s = s;
-    $$('.fl-szolg-sor').forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-s') === s)); });
     all.honap = all.honap || honapStr(ma());
     lepes(3, fokusz !== false);
     honapBetolt();
@@ -172,7 +268,7 @@
     all.havi = null;
     napokRajzol(true);
     savokRajzol();
-    var hossz = szolg().perc;
+    var hossz = kosar().perc;
     savokKer(all.sz, all.honap).then(function (j) {
       if (sajat !== keresSzam) return;
       if (!j) {   // régi szkript: a hónap napjait a szkript számolja
@@ -231,7 +327,7 @@
   }
 
   function savokBetolt() {
-    if (all.havi) { savokRajzol(all.havi[all.datum] ? szabadNap(all.havi[all.datum], all.datum, szolg().perc) : []); return; }
+    if (all.havi) { savokRajzol(all.havi[all.datum] ? szabadNap(all.havi[all.datum], all.datum, kosar().perc) : []); return; }
     var sajat = ++keresSzam;
     $('[data-savok-cim]').textContent = T('Szabad időpontok betöltése…', 'Se încarcă orele libere…');
     $('[data-savok]').innerHTML = '';
@@ -278,6 +374,7 @@
       megj: f.megj.value.trim(), hozzajarul: true, weboldal: f.weboldal.value,
       nyelv: RO ? 'ro' : 'hu',   // a vendégnek szóló levelek és hibaüzenetek nyelve
     };
+    if (all.atut) { torzs.atut = all.atut.id; torzs.atutT = all.atut.t; }
     fetch(API, { method: 'POST', redirect: 'follow', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(torzs) })
       .then(function (r) { return r.json(); })
       .then(function (j) {
@@ -290,13 +387,17 @@
             savokKer(all.sz, all.honap).then(function () { all.datum = nap; savokBetolt(); $('[data-savok-cim]').textContent = uzen; });
             return;
           }
+          if (j.atutHiba) atutVege(j.hiba);
           jelez(j.hiba); return;
         }
         var sz = ADAT.nevek[all.sz];
         $('[data-kesz-szoveg]').textContent = T('A kérésed foglalja az időpontot ' + sz.nev + ' naptárában (' + szepDatum(all.datum) + ', ' + all.ido +
-          '). Hamarosan visszaigazolja — a visszaigazolást a(z) ' + torzs.email + ' címre küldjük.',
+          '). A foglalás a szakember visszajelzésével válik véglegessé. Igyekszünk minél hamarabb visszajelezni a foglalásoddal kapcsolatban — a visszajelzést a(z) ' + torzs.email + ' címre küldjük.' +
+          (all.atut ? ' A korábbi időpontod addig érvényes, amíg az újat vissza nem igazoljuk.' : ''),
           'Cererea ta rezervă ora în calendarul lui ' + sz.nev + ' (' + szepDatum(all.datum) + ', ' + all.ido +
-          '). Îți va confirma în curând — confirmarea o trimitem la adresa ' + torzs.email + '.');
+          '). Programarea devine definitivă după răspunsul specialistului. Ne străduim să îți răspundem cât mai curând — răspunsul îl trimitem la adresa ' + torzs.email + '.' +
+          (all.atut ? ' Ora ta anterioară rămâne valabilă până confirmăm noua oră.' : ''));
+        atutVege();
         savokFelejt();   // a most foglalt időpont már ne látsszon szabadnak
         lepes('kesz');
         var k = $('[data-lepes="kesz"]'); k.focus({ preventScroll: true });
@@ -310,14 +411,15 @@
   });
 
   $('[data-ujra]').addEventListener('click', function () {
-    all.s = null; all.datum = null; all.ido = null;
+    all.val = []; all.s = null; all.datum = null; all.ido = null;
+    if (all.sz) szolgRajzol();
     lepes(1, true);
   });
   $$('[data-vissza]').forEach(function (b) {
     b.addEventListener('click', function () {
       var n = +b.getAttribute('data-vissza');
       if (n === 1) lepes(1, true);
-      if (n === 2) lepes(ADAT.szakemberek[all.sz].szolg.length === 1 ? 1 : 2, true);
+      if (n === 2) lepes(lista().length === 1 && !lista()[0].valt ? 1 : 2, true);
       if (n === 3) { lepes(3, true); honapBetolt(); }
     });
   });
@@ -336,7 +438,37 @@
     });
   })();
 
+  /* átütemezés: a visszaigazoló levél „Új időpontot kérek” linkje (kapcsolat.html?sz=…&atut=…&t=…#foglalo).
+     A szkript az aláírt link alapján visszaadja a vendég adatait és a régi szolgáltatásokat: előre kitöltjük.
+     A régi időpont addig érvényes, amíg a szakember az újat el nem fogadja. */
+  function atutVege(szoveg) {
+    all.atut = null;
+    var b = $('[data-atut]');
+    if (szoveg) { b.hidden = false; b.textContent = szoveg; } else b.hidden = true;
+  }
+  var sz0 = q.get('sz') && ADAT.szakemberek[q.get('sz')] ? q.get('sz') : null;
+  if (sz0 && q.get('atut') && q.get('t')) {
+    all.atut = { id: q.get('atut'), t: q.get('t') };
+    var b = $('[data-atut]');
+    b.hidden = false; b.textContent = T('Átütemezés betöltése…', 'Se încarcă reprogramarea…');
+    szakemberValaszt(sz0, false, []);
+    api({ m: 'atut', sz: sz0, id: all.atut.id, t: all.atut.t }).then(function (j) {
+      if (!j.ok) throw new Error();
+      var f = urlap.elements;
+      f.nev.value = j.nev || ''; f.tel.value = j.tel || ''; f.email.value = j.email || '';
+      b.innerHTML = '';
+      var e = document.createElement('b'); e.textContent = T('Átütemezés', 'Reprogramare');
+      b.appendChild(e);
+      b.appendChild(document.createTextNode(' — ' + T('a jelenlegi időpontod: ', 'programarea ta actuală: ') + j.mikor + ' (' + j.szolg + '). ' +
+        T('Válassz új időpontot; a mostani addig érvényes, amíg ' + ADAT.nevek[sz0].nev + ' vissza nem igazolja az újat.',
+          'Alege o nouă oră; cea actuală rămâne valabilă până când ' + ADAT.nevek[sz0].nev + ' o confirmă pe cea nouă.')));
+      szakemberValaszt(sz0, false, String(j.s || '').split(','));
+    }).catch(function () {
+      atutVege(T('Ez az átütemezési link már nem érvényes (a foglalást közben lemondták vagy lezajlott). Foglalhatsz új időpontot.',
+        'Acest link de reprogramare nu mai este valabil (programarea a fost anulată sau a avut loc). Poți face o programare nouă.'));
+    });
+  }
   /* előre kiválasztott szakember: kapcsolat.html?sz=barbi#foglalo */
-  if (q.get('sz') && ADAT.szakemberek[q.get('sz')]) szakemberValaszt(q.get('sz'), false);
+  else if (sz0) szakemberValaszt(sz0, false);
   else lepes(1);
 })();
