@@ -82,7 +82,7 @@
     return p < 60 ? p + m : (p % 60 ? Math.floor(p / 60) + o + ' ' + (p % 60) + m : (p / 60) + o);
   }
   function ma() { var d = new Date(); d.setHours(0, 0, 0, 0); return d; }
-  function utolsoNap() { var d = ma(); d.setDate(d.getDate() + ADAT.maxNap); return d; }
+  function utolsoNap() { var p = ADAT.utolsoNap.split('-'); return new Date(+p[0], p[1] - 1, +p[2]); }
 
   function api(params) {
     var u = API + (API.indexOf('?') < 0 ? '?' : '&') + new URLSearchParams(Object.assign({ nyelv: RO ? 'ro' : 'hu' }, params)).toString();
