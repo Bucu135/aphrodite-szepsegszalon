@@ -162,6 +162,16 @@
     $('[data-o="sz"]').textContent = sz ? sz.nev : '—';
     $('[data-o="s"]').textContent = k ? k.sorok.join(' + ') + ' · ' + idotartam(k.perc) + (k.ar ? ' · ' + k.ar : '') : '—';
     $('[data-o="ido"]').textContent = all.datum && all.ido ? szepDatum(all.datum) + ', ' + all.ido : '—';
+    // kérdés esetén a kiválasztott szakember saját száma (Bence, 10-09); amíg nincs választva, a szalon száma
+    var kerdes = $('[data-o-kerdes]');
+    if (kerdes.dataset.alap == null) kerdes.dataset.alap = kerdes.innerHTML;
+    kerdes.innerHTML = sz
+      ? T('A foglalás a szakember visszajelzésével válik véglegessé. Igyekszünk minél hamarabb visszajelezni a foglalásoddal kapcsolatban. Kérdés esetén keresd a szakembert telefonon vagy WhatsAppon: ',
+          'Programarea devine definitivă după răspunsul specialistului. Ne străduim să îți răspundem cât mai curând. Pentru întrebări, contactează specialistul telefonic sau pe WhatsApp: ')
+        + '<a class="link" href="tel:+' + sz.intl + '">' + sz.telefon + '</a> · <a class="link" href="https://wa.me/' + sz.intl + '?text='
+        + encodeURIComponent(T('Szia ' + sz.becenev + '! Kérdésem lenne a foglalásommal kapcsolatban.', 'Bună, ' + sz.becenev + '! Am o întrebare despre programarea mea.'))
+        + '" rel="noopener" target="_blank">WhatsApp</a>.'
+      : kerdes.dataset.alap;
     $('[data-vissza="1"]').hidden = !all.sz;
     $('[data-vissza="2"]').hidden = !all.s;
     $('[data-vissza="3"]').hidden = !all.ido;
