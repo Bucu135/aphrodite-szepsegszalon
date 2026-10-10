@@ -623,6 +623,7 @@ html:not(.js) .loader{display:none}
   .tanitvany{grid-template-columns:1fr}
   .bio-grid{grid-template-columns:1fr}
   .bio-kep{max-height:46vh; overflow:hidden}
+  .bio-kep img{object-position:50% 18%}   /* a dobozt levágjuk: inkább alul vesszen el, ne a fej */
 }
 @media (max-width:749px){
   body{font-size:16.5px}
