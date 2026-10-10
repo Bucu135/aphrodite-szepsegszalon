@@ -438,13 +438,28 @@
     $('[data-savok-cim]').textContent = T('Az időpontokat most nem sikerült betölteni. Próbáld újra, vagy hívd a szakembert.', 'Orele nu au putut fi încărcate. Încearcă din nou sau sună specialistul.');
   }
 
-  /* előtöltés: az online szakemberek e havi (és ha belefér, a következő havi) sávjai már az oldal
-     betöltésekor elindulnak, hogy mire a vendég a naptárhoz ér, ne kelljen várnia */
+  /* előtöltés + automatikus bekapcsolás: mindenki e havi (és ha belefér, a következő havi) sávjai már az
+     oldal betöltésekor elindulnak. Akinél ebben a két hónapban van „[Név] Dolgozom” bejegyzés, annak a
+     gombja kattinthatóvá válik; akinél nincs (vagy a lekérdezés nem sikerült), a helyére a telefonos
+     kártya kerül. Így egy lány akkor válik foglalhatóvá, amikor beírja a naptárába, mikor dolgozik. */
+  var AKTIV = {};   // sz → Promise<boolean>
   (function () {
     var most = honapStr(ma()), kov = new Date(ma()); kov.setDate(1); kov.setMonth(kov.getMonth() + 1);
     Object.keys(ADAT.szakemberek).forEach(function (sz) {
-      savokKer(sz, most);
-      if (honapStr(kov) <= honapStr(utolsoNap())) savokKer(sz, honapStr(kov));
+      var kerek = [savokKer(sz, most)];
+      if (honapStr(kov) <= honapStr(utolsoNap())) kerek.push(savokKer(sz, honapStr(kov)));
+      AKTIV[sz] = Promise.all(kerek).then(function (js) {
+        return js.some(function (j) {
+          return j && Object.keys(j.savok).some(function (d) { return j.savok[d].m && j.savok[d].m.length; });
+        });
+      });
+      AKTIV[sz].then(function (van) {
+        var b = $('.fl-ember[data-sz="' + sz + '"]');
+        if (!b) return;
+        if (van) { b.disabled = false; b.classList.remove('fl-ember-tolt'); return; }
+        var t = $('[data-tel-sz="' + sz + '"]');
+        if (t && all.sz !== sz) b.parentNode.replaceChild(t, b);
+      });
     });
   })();
 
@@ -478,7 +493,10 @@
         'Acest link de reprogramare nu mai este valabil (programarea a fost anulată sau a avut loc). Poți face o programare nouă.'));
     });
   }
-  /* előre kiválasztott szakember: kapcsolat.html?sz=barbi#foglalo */
-  else if (sz0) szakemberValaszt(sz0, false);
-  else lepes(1);
+  /* előre kiválasztott szakember: kapcsolat.html?sz=barbi#foglalo — csak ha nála van „Dolgozom” bejegyzés;
+     különben az 1. lépés marad, ahol a telefonos kártyája látszik */
+  else {
+    lepes(1);
+    if (sz0) AKTIV[sz0].then(function (van) { if (van && !all.sz) szakemberValaszt(sz0, false); });
+  }
 })();
