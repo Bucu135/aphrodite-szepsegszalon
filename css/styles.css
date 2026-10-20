@@ -579,6 +579,8 @@ html:not(.js) .loader{display:none}
 .foot a{text-decoration:none; color:#E4DCCF; transition:color .3s}
 .foot a:hover{color:var(--gold-lt)}
 .foot-nev{color:var(--dark-muted); margin-right:6px}
+.foot-sal{display:inline-block; margin-top:18px}
+.foot-sal img{display:block; width:200px; height:auto; background:#fff; padding:4px 6px; border-radius:4px}
 .foot-base{margin-top:clamp(38px,4vw,56px); padding-top:22px; border-top:1px solid rgba(176,132,85,.24); display:flex; justify-content:space-between; gap:18px; flex-wrap:wrap; font-size:13px; letter-spacing:.06em; color:#9A8E7E}
 
 /* ============================================================
